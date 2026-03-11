@@ -52,50 +52,50 @@ const SectorCard: React.FC<{ sector: typeof SECTORS[0], index: number }> = ({ se
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`
-        relative flex-shrink-0 w-80 min-w-[320px] h-[440px] 
-        rounded-[1.75rem] overflow-hidden bg-white border border-slate-100 
+        relative flex-shrink-0 w-[280px] md:w-80 min-w-[280px] md:min-w-[320px] h-[400px] md:h-[460px] flex flex-col
+        rounded-[1.75rem] overflow-hidden bg-white border border-slate-100/50 
         transition-all duration-500 ease-out cursor-pointer
-        ${isHovered ? 'translate-y-[-10px] shadow-xl shadow-slate-200 scale-[1.02] z-10' : 'translate-y-0 shadow-md'}
+        ${isHovered ? 'md:translate-y-[-10px] shadow-xl md:shadow-2xl shadow-slate-200 scale-[1.02] md:scale-100 z-10' : 'translate-y-0 shadow-md'}
         animate-in fade-in slide-in-from-bottom-4
       `}
       style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'both' }}
     >
       {/* Image Container */}
-      <div className="h-[38%] overflow-hidden relative">
+      <div className="h-48 overflow-hidden relative flex-shrink-0 bg-white">
         <img
           src={sector.image}
           alt={sector.title}
-          className={`w-full h-full object-cover transition-transform duration-700 ease-out
+          className={`w-full h-full object-cover transition-transform duration-700 ease-out align-bottom
             ${isHovered ? 'scale-110' : 'scale-100'}`}
           onError={(e) => {
             (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600";
           }}
         />
         {/* Softer Gradient fade to content area */}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col h-[62%] relative z-30">
+      <div className="p-5 md:p-6 flex flex-col flex-1 relative z-30 bg-white -mt-1 pt-4">
         <div className={`
-          w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center mb-4 shadow-sm
+          w-10 h-10 md:w-12 md:h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-4 md:mb-5 shadow-sm
           border border-slate-100 transition-transform duration-500
           ${isHovered ? 'rotate-12 scale-110' : ''}
         `}>
-          <div className={sector.color}>
+          <div className={`${sector.color} [&>svg]:w-4 [&>svg]:h-4 md:[&>svg]:w-5 md:[&>svg]:h-5`}>
             {sector.icon}
           </div>
         </div>
 
-        <h3 className="text-lg font-bold text-slate-900 mb-2 tracking-tight">
+        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-3 tracking-tight">
           {sector.title}
         </h3>
-        <p className="text-slate-500 text-xs leading-relaxed line-clamp-4">
+        <p className="text-slate-600 text-sm md:text-base leading-relaxed line-clamp-4 font-medium">
           {sector.description}
         </p>
 
         {/* Hover Arrow Indicator */}
-        <div className={`mt-auto transition-all duration-500 flex items-center text-blue-600 font-bold text-[10px] uppercase tracking-widest
+        <div className={`mt-auto transition-all duration-500 flex items-center text-blue-600 font-bold text-xs uppercase tracking-widest
           ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}>
           Get started
           <span className="ml-1.5">→</span>

@@ -106,27 +106,37 @@ export const ScrollytellingSection = () => {
   return (
     <div id="solutions" className="bg-[#0f172a] font-sans text-white selection:bg-blue-500/30 selection:text-white overflow-clip" ref={containerRef}>
       {/* Scrollytelling Section */}
-      <section className="container mx-auto px-6 md:px-20 flex flex-col md:flex-row relative items-start gap-12 pt-20 pb-32">
+      <section className="container mx-auto px-6 md:px-20 flex flex-col md:flex-row relative items-start gap-12 pt-4 pb-32">
         <div className="w-full md:w-1/2 relative z-10">
           {STAGES.map((stage, i) => (
             <div
               key={i}
               ref={el => { stepsRef.current[i] = el; }}
-              className={`step min-h-[100vh] flex items-center justify-center transition-all duration-1000 ${activeIndex === i ? 'opacity-100 md:translate-x-4' : 'opacity-10'} py-20 px-4 md:px-0`}
+              className={`step min-h-[85vh] md:min-h-[100vh] flex items-center justify-center transition-all duration-1000 ${activeIndex === i ? 'opacity-100 md:translate-x-4' : 'opacity-10'} py-12 md:py-20 px-0`}
             >
-              <div className="max-w-xl flex flex-col items-start text-left lg:pr-24">
-                <div className="flex items-center gap-3 mb-6">
-                  {React.cloneElement(stage.icon as React.ReactElement, { className: "w-8 h-8 text-white" })}
-                  <span className="text-base font-black uppercase tracking-[0.25em] text-slate-400">
+              <div className="max-w-xl flex flex-col items-start text-left lg:pr-24 relative z-20">
+                <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                  {React.cloneElement(stage.icon as React.ReactElement, { className: "w-6 h-6 md:w-8 md:h-8 text-white" })}
+                  <span className="text-xs md:text-base font-black uppercase tracking-[0.2em] md:tracking-[0.25em] text-slate-400">
                     {stage.tagline}
                   </span>
                 </div>
-                <h2 className="text-4xl md:text-7xl font-black mt-2 mb-6 md:mb-8 tracking-tight text-white leading-tight">
+                <h2 className="text-3xl md:text-7xl font-black mt-2 mb-4 md:mb-8 tracking-tight text-white leading-tight">
                   {stage.title}
                 </h2>
-                <p className="text-xl md:text-3xl text-slate-300 leading-relaxed font-medium">
+                <p className="text-lg md:text-3xl text-slate-300 leading-relaxed font-medium">
                   {stage.description}
                 </p>
+                {/* Mobile specific graphic block so it shows below text on phone */}
+                <div className="md:hidden w-full aspect-square relative mt-8 flex items-center justify-center pointer-events-none rounded-3xl overflow-hidden bg-slate-900/50 border border-white/5">
+                   <div className={`absolute -inset-10 blur-[80px] opacity-20 bg-gradient-to-br ${stage.color}`} />
+                   <div className="absolute inset-0 flex items-center justify-center">
+                     {i === 0 && <ScreenInstagramDM />}
+                     {i === 1 && <ScreenWhatsAppChat />}
+                     {i === 2 && <ScreenSMSChat />}
+                     {i === 3 && <ScreenTikTokFeed />}
+                   </div>
+                </div>
               </div>
             </div>
           ))}

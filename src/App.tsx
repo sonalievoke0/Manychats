@@ -60,20 +60,26 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-      className={`fixed z-50 transition-all duration-300 ${
-        scrolled
+      className={`fixed z-50 transition-all duration-300 ${scrolled
           ? 'top-4 left-4 right-4 md:left-12 md:right-12 bg-slate-100/90 backdrop-blur-md text-slate-900 shadow-xl rounded-full border border-slate-200'
           : 'top-0 left-0 right-0 bg-transparent text-white'
-      }`}
+        }`}
     >
       {/* Main bar */}
       <div className="py-4 px-2 md:px-8 flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center gap-4 pl-4">
-          <img src={evokeLogo} alt="Evoke AI" className={`h-11 w-auto object-contain drop-shadow-lg mt-3 transition-all ${scrolled ? 'brightness-50' : ''}`} />
-          <div className="flex flex-col leading-tight mt-1">
-            <span className={`text-2xl font-black tracking-tight ${scrolled ? 'text-slate-900' : 'text-white'}`}>EVOKE</span>
-            <span className={`text-xs font-semibold tracking-widest ${scrolled ? 'text-slate-500' : 'text-white/60'}`}>AI Division of DamnArt</span>
+        <div className="flex items-center gap-4 pl-4 group cursor-pointer relative">
+          {/* Shiny Hover Glow */}
+          <div className="absolute inset-0 bg-blue-400/20 blur-xl rounded-full scale-0 group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
+
+          <img
+            src={evokeLogo}
+            alt="Evoke AI"
+            className={`h-16 w-auto object-contain drop-shadow-lg mt-3 transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-[0_0_15px_rgba(37,99,235,0.5)] ${scrolled ? 'brightness-50 group-hover:brightness-75' : ''}`}
+          />
+          <div className="flex flex-col leading-tight mt-1 transition-transform duration-500 group-hover:translate-x-1">
+            <span className={`text-4xl font-black tracking-tight ${scrolled ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-blue-200'} transition-colors duration-300`}>EVOKE</span>
+            <span className={`text-sm font-semibold tracking-widest ${scrolled ? 'text-slate-500 group-hover:text-blue-500' : 'text-white/60 group-hover:text-white'} transition-colors duration-300`}>AI Division of DamnArt</span>
           </div>
         </div>
 
@@ -83,11 +89,10 @@ const Navbar = () => {
             <button
               key={item.id}
               onClick={() => scrollTo(item.id)}
-              className={`relative px-4 py-2 transition-all duration-300 rounded-full cursor-pointer text-lg font-bold bg-transparent uppercase tracking-wider group ${
-                scrolled
+              className={`relative px-4 py-2 transition-all duration-300 rounded-full cursor-pointer text-lg font-bold bg-transparent uppercase tracking-wider group ${scrolled
                   ? 'text-slate-600 hover:text-white hover:bg-blue-600 hover:shadow-sm hover:shadow-blue-600/20'
                   : 'text-white/90 hover:text-white hover:bg-blue-600 hover:shadow-sm hover:shadow-blue-600/20'
-              }`}
+                }`}
             >
               {item.label}
             </button>
@@ -100,11 +105,10 @@ const Navbar = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => scrollTo('contact')}
-            className={`hidden sm:block px-6 py-2.5 rounded-full text-base font-bold transition-all shadow-lg border border-transparent ${
-              scrolled
+            className={`hidden sm:block px-6 py-2.5 rounded-full text-base font-bold transition-all shadow-lg border border-transparent ${scrolled
                 ? 'bg-slate-900 text-white hover:bg-slate-800'
                 : 'bg-white text-evoke-black hover:bg-white/90 hover:border-white shadow-white/10'
-            }`}
+              }`}
           >
             Get Free Audit
           </motion.button>
@@ -113,9 +117,8 @@ const Navbar = () => {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`md:hidden flex items-center justify-center w-10 h-10 rounded-xl transition-colors ${
-              scrolled ? 'bg-black/5 text-slate-900 hover:bg-black/10' : 'bg-white/10 text-white hover:bg-white/20'
-            }`}
+            className={`md:hidden flex items-center justify-center w-10 h-10 rounded-xl transition-colors ${scrolled ? 'bg-black/5 text-slate-900 hover:bg-black/10' : 'bg-white/10 text-white hover:bg-white/20'
+              }`}
             aria-label="Toggle menu"
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -163,9 +166,8 @@ const Navbar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.06 }}
                   onClick={() => scrollTo(item.id)}
-                  className={`text-left text-lg font-semibold py-3 px-4 rounded-xl transition-all bg-transparent border-none cursor-pointer ${
-                    scrolled ? 'text-slate-900 hover:bg-black/5' : 'text-white hover:bg-white/10 hover:text-evoke-accent'
-                  }`}
+                  className={`text-left text-lg font-semibold py-3 px-4 rounded-xl transition-all bg-transparent border-none cursor-pointer ${scrolled ? 'text-slate-900 hover:bg-black/5' : 'text-white hover:bg-white/10 hover:text-evoke-accent'
+                    }`}
                 >
                   {item.label}
                 </motion.button>
@@ -175,9 +177,8 @@ const Navbar = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navItems.length * 0.06 }}
                 onClick={() => scrollTo('contact')}
-                className={`mt-3 px-6 py-3 rounded-full text-sm font-bold transition-all shadow-lg ${
-                  scrolled ? 'bg-slate-900 text-white' : 'bg-evoke-accent text-white hover:opacity-90'
-                }`}
+                className={`mt-3 px-6 py-3 rounded-full text-sm font-bold transition-all shadow-lg ${scrolled ? 'bg-slate-900 text-white' : 'bg-evoke-accent text-white hover:opacity-90'
+                  }`}
               >
                 Get Free Audit
               </motion.button>
@@ -208,7 +209,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="pt-40 pb-32 px-6 md:px-12 lg:px-24 overflow-hidden relative">
+    <section className="pt-32 pb-24 md:pt-40 md:pb-32 px-4 md:px-12 lg:px-24 overflow-hidden relative">
       {/* Background Video */}
       <div className="absolute inset-0 -z-20 bg-black">
         <video
@@ -232,14 +233,14 @@ const Hero = () => {
         >
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm font-bold mb-8 border border-white/20 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-xs md:text-sm font-bold mb-6 md:mb-8 border border-white/20 backdrop-blur-sm self-start"
           >
             <Zap size={16} className="fill-current" />
             <span>New: AEON AI Framework 2.0</span>
           </motion.div>
-          <motion.h1 variants={itemVariants} className="text-6xl md:text-[5.5rem] font-black leading-[0.9] tracking-tighter mb-10 text-white">
+          <motion.h1 variants={itemVariants} className="text-[3rem] sm:text-6xl md:text-[5.5rem] font-black leading-[1] md:leading-[0.9] tracking-tighter mb-8 md:mb-10 text-white">
             Your Business, <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-evoke-accent via-blue-500 to-indigo-600 animate-gradient-x">Automated.</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-evoke-accent via-blue-500 to-indigo-600 animate-gradient-x leading-normal md:leading-[0.9]">Automated.</span>
           </motion.h1>
 
           <motion.div variants={itemVariants} className="space-y-8 mb-12">
@@ -252,19 +253,19 @@ const Hero = () => {
               We deploy the <span className="text-white font-bold border-b-2 border-evoke-accent">AEON AI Framework</span> via Manychat to transform your DMs into a high-performance sales machine—across Instagram, Facebook, WhatsApp, Telegram, TikTok, and SMS.
             </p>
           </motion.div>
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-5">
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full md:w-auto">
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 25px 30px -10px rgb(37 99 235 / 0.3)" }}
               whileTap={{ scale: 0.95 }}
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-evoke-accent text-white px-10 py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-evoke-accent/20"
+              className="bg-evoke-accent text-white px-8 py-4 sm:px-10 sm:py-5 rounded-2xl font-bold text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all shadow-xl shadow-evoke-accent/20 w-full sm:w-auto"
             >
-              Get your free audit <ArrowRight size={22} />
+              Get your free audit <ArrowRight size={22} className="hidden sm:block" />
             </motion.button>
             <motion.button
               whileHover={{ backgroundColor: "rgba(255,255,255,0.15)", borderColor: "rgba(255,255,255,0.6)" }}
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="border-2 border-white/30 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all backdrop-blur-sm"
+              className="border-2 border-white/30 text-white px-8 py-4 sm:px-10 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all backdrop-blur-sm w-full sm:w-auto"
             >
               Enterprise Solutions
             </motion.button>
@@ -279,14 +280,14 @@ const Hero = () => {
                 >
                   <img
                     src={`https://picsum.photos/seed/user${i}/80/80`}
-                    className="w-12 h-12 rounded-full border-4 border-white shadow-lg cursor-pointer object-cover"
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-white shadow-lg cursor-pointer object-cover"
                     alt="User"
                     referrerPolicy="no-referrer"
                   />
                 </motion.div>
               ))}
             </div>
-            <div className="text-sm">
+            <div className="text-white text-sm md:text-base font-semibold">
               <div className="flex text-yellow-400 mb-1">
                 {[1, 2, 3, 4, 5].map(i => <Zap key={i} size={14} className="fill-current" />)}
               </div>
@@ -299,7 +300,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
+          className="relative hidden md:block"
         >
           {/* Floating UI Elements */}
           <motion.div
@@ -912,30 +913,28 @@ const faqData = [
 
 const FAQItem: React.FC<{ item: any; isOpen: boolean; onClick: () => void }> = ({ item, isOpen, onClick }) => {
   return (
-    <motion.div 
+    <motion.div
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className={`mb-5 overflow-hidden border transition-all duration-500 rounded-[2rem] ${
-        isOpen 
-          ? 'border-blue-500 bg-white shadow-xl shadow-blue-100/50 ring-1 ring-blue-100' 
+      className={`mb-5 overflow-hidden border transition-all duration-500 rounded-[2rem] ${isOpen
+          ? 'border-blue-500 bg-white shadow-xl shadow-blue-100/50 ring-1 ring-blue-100'
           : 'border-slate-100 bg-white hover:border-blue-200 hover:shadow-lg hover:shadow-slate-200/50'
-      }`}
+        }`}
     >
       <button
         onClick={onClick}
         className="flex w-full items-center justify-between p-7 text-left focus:outline-none group"
       >
         <div className="flex items-center gap-5">
-          <span className={`font-bold text-xl md:text-2xl transition-colors duration-300 ${
-            isOpen ? 'text-blue-900' : 'text-slate-900 group-hover:text-blue-600'
-          }`}>
+          <span className={`font-bold text-xl md:text-2xl transition-colors duration-300 ${isOpen ? 'text-blue-900' : 'text-slate-900 group-hover:text-blue-600'
+            }`}>
             {item.question}
           </span>
         </div>
         <motion.div
-          animate={{ 
+          animate={{
             rotate: isOpen ? 180 : 0,
             backgroundColor: isOpen ? '#2563eb' : '#eff6ff'
           }}
@@ -987,7 +986,7 @@ const FAQ = () => {
           >
             Got Questions? <span className="text-blue-600">FAQs</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -1123,7 +1122,7 @@ const Footer = () => {
               <a href="mailto:damart.ai.guladab@gmail.com" className="w-12 h-12 rounded-full bg-evoke-accent border border-transparent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-evoke-accent/30 transition-all duration-300"><Mail size={22} className="text-white" /></a>
             </div>
           </div>
-          
+
           <div className="lg:col-span-1">
             <h4 className="text-lg font-black mb-6 text-white tracking-wide">Solutions</h4>
             <ul className="space-y-4 text-gray-400 text-base font-medium">
@@ -1197,8 +1196,8 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm font-medium">
           <span>© 2026 EVOKE AI Platform. Premium automation by DamnArt. All rights reserved.</span>
           <div className="flex gap-6">
-             <a href="https://www.damnart.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform hover:after:scale-x-100 hover:after:origin-bottom-left">Privacy Policy</a>
-             <a href="#" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform hover:after:scale-x-100 hover:after:origin-bottom-left">Terms of Service</a>
+            <a href="https://www.damnart.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform hover:after:scale-x-100 hover:after:origin-bottom-left">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform hover:after:scale-x-100 hover:after:origin-bottom-left">Terms of Service</a>
           </div>
         </div>
       </div>
@@ -1540,8 +1539,8 @@ export default function App() {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <ScrollytellingSection />
       <PainPoints />
+      <ScrollytellingSection />
       <Sectors />
       {/* <Industries /> */}
       <Timeline />
