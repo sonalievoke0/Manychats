@@ -34,7 +34,7 @@ const steps: Step[] = [
     icon: <Layers className="w-6 h-6 md:w-7 md:h-7 text-current" />,
     image: architectureImg,
     description: "Our engineers build custom, AEON-powered flows tailored to your brand's unique logic.",
-    bgClass: "bg-[#E4D4F4]", // Pastel purple
+    bgClass: "bg-black", // Changed to black background for PNG compatibility
     iconWrapperClass: "bg-[#4B4EFC] text-white", // Royal Blue Rounded
   },
   {
@@ -42,7 +42,7 @@ const steps: Step[] = [
     title: "The Integration",
     icon: <Puzzle className="w-5 h-5 md:w-6 md:h-6 text-current" />,
     image: integrationImg,
-    description: "We sync your AI agents seamlessly with your CRM and existing tech stack.",
+    description: "We sync your AI agents seamlessly with your CRM (Hubspot, Zoho, or Salesforce) and existing stack.",
     bgClass: "bg-[#F9FAFB]", // Very light gray/white
     iconWrapperClass: "bg-[#1F2937] text-white", // Dark Slate Pill/Toggle
   },
@@ -105,7 +105,7 @@ export default function Timeline() {
               <motion.div
                 whileHover={{ scale: 1.05, y: -8 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`relative w-full aspect-[4/3] rounded-[1.25rem] ${step.id === 1 || step.id === 2 || step.id === 3 || step.id === 4 ? 'bg-white' : step.bgClass} overflow-hidden mb-6 shadow-sm border border-black/5 flex items-center justify-center cursor-pointer`}
+                className={`relative w-full aspect-[4/3] rounded-[1.25rem] ${step.id === 1 ? 'bg-white' : step.bgClass} overflow-hidden mb-6 shadow-sm border border-black/5 flex items-center justify-center cursor-pointer`}
               >
 
                 {/* Specific Background Patterns to match user reference */}
@@ -129,8 +129,8 @@ export default function Timeline() {
                   {step.id === 1 && (
                     <div className="flex flex-col items-center justify-center w-full h-full relative group/audit overflow-hidden rounded-[1.25rem]">
                       {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center bg-white">
-                        <img src={step.image} alt="Audit Process" className="w-full h-full object-cover" />
+                      <div className={`absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center ${step.id === 1 ? 'bg-white' : 'transparent'}`}>
+                        <img src={step.image} alt="Audit Process" className="w-full h-full object-contain" />
                         <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
                       </div>
                     </div>
@@ -140,8 +140,8 @@ export default function Timeline() {
                   {step.id === 2 && (
                     <div className="flex flex-col items-center justify-center w-full h-full relative group/arch overflow-hidden rounded-[1.25rem]">
                       {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center bg-white">
-                        <img src={step.image} alt="Architecture Process" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center transparent">
+                        <img src={step.image} alt="Architecture Process" className="w-full h-full object-contain" />
                         <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
                       </div>
                     </div>
@@ -151,8 +151,8 @@ export default function Timeline() {
                   {step.id === 3 && (
                     <div className="flex flex-col items-center justify-center w-full h-full relative group/integ overflow-hidden rounded-[1.25rem]">
                       {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center bg-white">
-                        <img src={step.image} alt="Integration Process" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center transparent">
+                        <img src={step.image} alt="Integration Process" className="w-full h-full object-contain" />
                         <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
                       </div>
                     </div>
@@ -162,8 +162,8 @@ export default function Timeline() {
                   {step.id === 4 && (
                     <div className="flex flex-col items-center justify-center w-full h-full relative group/scale overflow-hidden rounded-[1.25rem]">
                       {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center bg-white">
-                        <img src={step.image} alt="Scale Process" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center transparent">
+                        <img src={step.image} alt="Scale Process" className="w-full h-full object-contain" />
                         <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
                       </div>
                     </div>
