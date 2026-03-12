@@ -59,7 +59,7 @@ const steps: Step[] = [
 
 export default function Timeline() {
   return (
-    <div id="process" className="py-16 md:py-20 bg-white font-sans overflow-x-hidden relative flex flex-col justify-center">
+    <div id="process" className="py-16 md:py-20 bg-slate-50 font-sans overflow-x-hidden relative flex flex-col justify-center">
 
       {/* Header Section */}
       <header className="px-6 text-center max-w-6xl mx-auto relative z-10 w-full mb-12 md:mb-16">
@@ -88,101 +88,105 @@ export default function Timeline() {
         </motion.div>
       </header>
 
-      {/* Process Cards Grid Section */}
-      <div className="max-w-[70rem] mx-auto px-6 w-full">
-        <div className="grid md:grid-cols-1 md:max-w-xl md:mx-auto lg:max-w-none lg:grid-cols-2 gap-x-12 gap-y-16">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
-              className="group flex flex-col cursor-default"
-            >
+      {/* Timeline Section */}
+      <div className="max-w-7xl mx-auto px-6 w-full relative">
+        {/* The Vertical Timeline Line */}
+        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-black hidden lg:block -translate-x-1/2 z-0" />
 
-              {/* Top Graphic Card container */}
-              <motion.div
-                whileHover={{ scale: 1.05, y: -8 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`relative w-full aspect-[4/3] rounded-[1.25rem] ${step.id === 1 ? 'bg-white' : step.bgClass} overflow-hidden mb-6 shadow-sm border border-black/5 flex items-center justify-center cursor-pointer`}
-              >
+        <div className="relative flex flex-col gap-y-8 md:gap-y-12 lg:gap-y-0">
+          {steps.map((step, index) => {
+            const isLeft = index % 2 === 0;
+            return (
+              <div key={step.id} className="relative flex flex-col lg:flex-row items-center justify-between lg:min-h-[280px] py-4 lg:py-0">
 
-                {/* Specific Background Patterns to match user reference */}
-                {step.id === 1 && (
-                  <div className="absolute inset-0 opacity-[0.08]"
-                    style={{ backgroundImage: 'linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)', backgroundSize: '25% 25%' }}
-                  />
-                )}
-                {step.id === 2 && (
-                  <div className="absolute inset-0 opacity-[0.04]"
-                    style={{
-                      backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjMDAwIi8+PHJlY3QgeD0iMjAiIHk9IjIwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9IiMwMDAiLz48L3N2Zz4=')",
-                      backgroundSize: '33.33% 33.33%'
-                    }}
-                  />
-                )}
-
-                {/* Visual Compositions */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  {/* Design 1: Audit Image (Full View) */}
-                  {step.id === 1 && (
-                    <div className="flex flex-col items-center justify-center w-full h-full relative group/audit overflow-hidden rounded-[1.25rem]">
-                      {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className={`absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center ${step.id === 1 ? 'bg-white' : 'transparent'}`}>
-                        <img src={step.image} alt="Audit Process" className="w-full h-full object-contain" />
-                        <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
+                {/* Content Side */}
+                <motion.div
+                  initial={{ opacity: 0, x: isLeft ? 80 : -80 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className={`w-full lg:w-[44%] ${isLeft ? 'lg:order-1' : 'lg:order-3'} z-10`}
+                >
+                  <div className="group flex flex-col cursor-default">
+                    {/* Top Graphic container */}
+                    <motion.div
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      className="relative w-full aspect-[16/10] mb-6 flex items-center justify-center cursor-pointer"
+                    >
+                      <div className="relative w-full h-full overflow-hidden rounded-[1.5rem]">
+                        <img
+                          src={step.image}
+                          alt={step.title}
+                          className="w-full h-full object-contain"
+                        />
                       </div>
-                    </div>
-                  )}
+                    </motion.div>
 
-                  {/* Design 2: Architecture Image (Full View) */}
-                  {step.id === 2 && (
-                    <div className="flex flex-col items-center justify-center w-full h-full relative group/arch overflow-hidden rounded-[1.25rem]">
-                      {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center transparent">
-                        <img src={step.image} alt="Architecture Process" className="w-full h-full object-contain" />
-                        <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
-                      </div>
+                    {/* Text Information below the card */}
+                    <div className="flex flex-col items-start px-1">
+                      <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-2 tracking-snug">
+                        {step.title}
+                      </h3>
+                      <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
+                        {step.description}
+                      </p>
                     </div>
-                  )}
+                  </div>
+                </motion.div>
 
-                  {/* Design 3: Integration Image (Full View) */}
-                  {step.id === 3 && (
-                    <div className="flex flex-col items-center justify-center w-full h-full relative group/integ overflow-hidden rounded-[1.25rem]">
-                      {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center transparent">
-                        <img src={step.image} alt="Integration Process" className="w-full h-full object-contain" />
-                        <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Design 4: Scale Image (Full View) */}
-                  {step.id === 4 && (
-                    <div className="flex flex-col items-center justify-center w-full h-full relative group/scale overflow-hidden rounded-[1.25rem]">
-                      {/* Full Image visible filling the absolute container (zooms in on hover) */}
-                      <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.12] origin-center transparent">
-                        <img src={step.image} alt="Scale Process" className="w-full h-full object-contain" />
-                        <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
-                      </div>
-                    </div>
-                  )}
+                {/* Central Step Indicator (Desktop) */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center z-20">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -45 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
+                    className="relative px-8 py-5 rounded-2xl flex items-center justify-center font-black text-xl shadow-2xl border-4 border-white bg-blue-700 text-white overflow-hidden group"
+                  >
+                    {/* Shiny Effect Overlay (Looping) */}
+                    <motion.div 
+                      animate={{ 
+                        left: ["-100%", "200%"],
+                      }}
+                      transition={{ 
+                        duration: 3, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        repeatDelay: 1
+                      }}
+                      className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent rotate-[35deg] pointer-events-none z-0" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
+                    <span className="relative z-10 uppercase tracking-wider">STEP {step.id}</span>
+                  </motion.div>
                 </div>
-              </motion.div>
 
-              {/* Text Information below the card */}
-              <div className="flex flex-col items-start px-1 md:px-2 flex-1">
-                <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 md:mb-3 tracking-snug">
-                  Step {step.id}: {step.title}
-                </h3>
-                <p className="text-slate-600 text-[15px] md:text-base leading-relaxed font-medium">
-                  {step.description}
-                </p>
+                {/* Mobile Step Indicator */}
+                <div className="lg:hidden my-6 z-10">
+                  <div className="relative px-6 py-4 rounded-xl flex items-center justify-center font-black text-lg shadow-lg border-2 border-white bg-blue-700 text-white overflow-hidden">
+                    <motion.div 
+                      animate={{ 
+                        left: ["-100%", "200%"],
+                      }}
+                      transition={{ 
+                        duration: 3, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        repeatDelay: 1
+                      }}
+                      className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent rotate-[35deg] pointer-events-none z-0" 
+                    />
+                    <span className="relative z-10">STEP {step.id}</span>
+                  </div>
+                </div>
+
+                {/* Empty Side for Layout */}
+                <div className={`hidden lg:block lg:w-[44%] ${isLeft ? 'lg:order-3' : 'lg:order-1'}`} />
+
               </div>
-
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
