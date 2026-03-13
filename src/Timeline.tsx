@@ -79,7 +79,7 @@ export default function Timeline() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-[0.95] text-balance">
             The Road to <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 animate-gradient-x">
-              Automation.
+              Automation
             </span>
           </h2>
           <p className="text-lg md:text-xl text-slate-500 font-semibold max-w-2xl mx-auto leading-relaxed opacity-80 mb-4">
@@ -95,43 +95,25 @@ export default function Timeline() {
 
         <div className="relative flex flex-col gap-y-8 md:gap-y-12 lg:gap-y-0">
           {steps.map((step, index) => {
-            const isLeft = index % 2 === 0;
+            const contentLeft = index % 2 === 0; // Step 1,3 → content left; Step 2,4 → content right
             return (
-              <div key={step.id} className="relative flex flex-col lg:flex-row items-center justify-between lg:min-h-[280px] py-4 lg:py-0">
+              <div key={step.id} className="relative flex flex-col lg:flex-row items-center justify-between lg:min-h-[420px] py-4 lg:py-0">
 
-                {/* Content Side */}
+                {/* Content Column */}
                 <motion.div
-                  initial={{ opacity: 0, x: isLeft ? 80 : -80 }}
+                  initial={{ opacity: 0, x: contentLeft ? -60 : 60 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  className={`w-full lg:w-[44%] ${isLeft ? 'lg:order-1' : 'lg:order-3'} z-10`}
+                  className={`w-full lg:w-[44%] z-10 ${contentLeft ? 'lg:order-1' : 'lg:order-3'}`}
                 >
-                  <div className="group flex flex-col cursor-default">
-                    {/* Top Graphic container */}
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -5 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      className="relative w-full aspect-[16/10] mb-6 flex items-center justify-center cursor-pointer"
-                    >
-                      <div className="relative w-full h-full overflow-hidden rounded-[1.5rem]">
-                        <img
-                          src={step.image}
-                          alt={step.title}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                    </motion.div>
-
-                    {/* Text Information below the card */}
-                    <div className="flex flex-col items-start px-1">
-                      <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-2 tracking-snug">
-                        {step.title}
-                      </h3>
-                      <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
-                        {step.description}
-                      </p>
-                    </div>
+                  <div className="flex flex-col items-start px-1">
+                    <h3 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-snug">
+                      {step.title}
+                    </h3>
+                    <p className="text-slate-600 text-lg md:text-xl leading-relaxed font-medium">
+                      {step.description}
+                    </p>
                   </div>
                 </motion.div>
 
@@ -145,17 +127,17 @@ export default function Timeline() {
                     className="relative px-8 py-5 rounded-2xl flex items-center justify-center font-black text-xl shadow-2xl border-4 border-white bg-blue-700 text-white overflow-hidden group"
                   >
                     {/* Shiny Effect Overlay (Looping) */}
-                    <motion.div 
-                      animate={{ 
+                    <motion.div
+                      animate={{
                         left: ["-100%", "200%"],
                       }}
-                      transition={{ 
-                        duration: 3, 
-                        repeat: Infinity, 
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
                         ease: "easeInOut",
                         repeatDelay: 1
                       }}
-                      className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent rotate-[35deg] pointer-events-none z-0" 
+                      className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent rotate-[35deg] pointer-events-none z-0"
                     />
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
                     <span className="relative z-10 uppercase tracking-wider">STEP {step.id}</span>
@@ -165,24 +147,44 @@ export default function Timeline() {
                 {/* Mobile Step Indicator */}
                 <div className="lg:hidden my-6 z-10">
                   <div className="relative px-6 py-4 rounded-xl flex items-center justify-center font-black text-lg shadow-lg border-2 border-white bg-blue-700 text-white overflow-hidden">
-                    <motion.div 
-                      animate={{ 
+                    <motion.div
+                      animate={{
                         left: ["-100%", "200%"],
                       }}
-                      transition={{ 
-                        duration: 3, 
-                        repeat: Infinity, 
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
                         ease: "easeInOut",
                         repeatDelay: 1
                       }}
-                      className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent rotate-[35deg] pointer-events-none z-0" 
+                      className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent rotate-[35deg] pointer-events-none z-0"
                     />
                     <span className="relative z-10">STEP {step.id}</span>
                   </div>
                 </div>
 
-                {/* Empty Side for Layout */}
-                <div className={`hidden lg:block lg:w-[44%] ${isLeft ? 'lg:order-3' : 'lg:order-1'}`} />
+                {/* Image Column */}
+                <motion.div
+                  initial={{ opacity: 0, x: contentLeft ? 60 : -60 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                  className={`w-full lg:w-[44%] z-10 ${contentLeft ? 'lg:order-3' : 'lg:order-1'}`}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.04, y: -5 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="relative w-full aspect-[4/3] min-h-[260px] flex items-center justify-center cursor-pointer"
+                  >
+                    <div className="relative w-full h-full overflow-hidden rounded-[1.5rem]">
+                      <img
+                        src={step.image}
+                        alt={step.title}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </motion.div>
+                </motion.div>
 
               </div>
             );
@@ -192,3 +194,4 @@ export default function Timeline() {
     </div>
   );
 }
+

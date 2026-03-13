@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import damnartLogo from './damnart.png';
 import evokeLogo from './evoke-BzE_NnH1 (1).png';
+import heroBg from './hero page background.mp4';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useInView, LayoutGroup } from 'motion/react';
 import { ScrollytellingSection } from './ScrollytellingSection';
 import Sectors from './Sectors';
@@ -61,25 +62,25 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
       className={`fixed z-50 transition-all duration-300 ${scrolled
-          ? 'top-4 left-4 right-4 md:left-12 md:right-12 bg-slate-100/90 backdrop-blur-md text-slate-900 shadow-xl rounded-full border border-slate-200'
-          : 'top-0 left-0 right-0 bg-transparent text-white'
+        ? 'top-4 left-4 right-4 md:left-12 md:right-12 bg-slate-100/90 backdrop-blur-md text-slate-900 shadow-xl rounded-[2rem] md:rounded-full border border-slate-200'
+        : 'top-0 left-0 right-0 bg-transparent text-white'
         }`}
     >
       {/* Main bar */}
-      <div className="py-4 px-2 md:px-8 flex justify-between items-center">
+      <div className="py-3 md:py-4 px-4 md:px-8 flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center gap-4 pl-4 group cursor-pointer relative">
+        <div className="flex items-center gap-2 md:gap-4 pl-0 md:pl-4 group cursor-pointer relative">
           {/* Shiny Hover Glow */}
           <div className="absolute inset-0 bg-blue-400/20 blur-xl rounded-full scale-0 group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
 
           <img
             src={evokeLogo}
             alt="Evoke AI"
-            className={`h-16 w-auto object-contain drop-shadow-lg mt-3 transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-[0_0_15px_rgba(37,99,235,0.5)] ${scrolled ? 'brightness-50 group-hover:brightness-75' : ''}`}
+            className={`h-10 md:h-16 w-auto object-contain drop-shadow-lg mt-0 md:mt-3 transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-[0_0_15px_rgba(37,99,235,0.5)] ${scrolled ? 'brightness-50 group-hover:brightness-75' : ''}`}
           />
-          <div className="flex flex-col leading-tight mt-1 transition-transform duration-500 group-hover:translate-x-1">
-            <span className={`text-4xl font-black tracking-tight ${scrolled ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-blue-200'} transition-colors duration-300`}>EVOKE</span>
-            <span className={`text-sm font-semibold tracking-widest ${scrolled ? 'text-slate-500 group-hover:text-blue-500' : 'text-white/60 group-hover:text-white'} transition-colors duration-300`}>AI Division of DamnArt</span>
+          <div className="flex flex-col leading-tight mt-0 md:mt-1 transition-transform duration-500 group-hover:translate-x-1">
+            <span className={`text-2xl md:text-4xl font-black tracking-tight ${scrolled ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-blue-200'} transition-colors duration-300`}>EVOKE AI</span>
+            <span className={`text-[10px] md:text-sm font-semibold tracking-widest ${scrolled ? 'text-slate-500 group-hover:text-blue-500' : 'text-white/60 group-hover:text-white'} transition-colors duration-300 uppercase`}>A Division of damnart </span>
           </div>
         </div>
 
@@ -90,8 +91,8 @@ const Navbar = () => {
               key={item.id}
               onClick={() => scrollTo(item.id)}
               className={`relative px-4 py-2 transition-all duration-300 rounded-full cursor-pointer text-lg font-bold bg-transparent uppercase tracking-wider group ${scrolled
-                  ? 'text-slate-600 hover:text-white hover:bg-blue-600 hover:shadow-sm hover:shadow-blue-600/20'
-                  : 'text-white/90 hover:text-white hover:bg-blue-600 hover:shadow-sm hover:shadow-blue-600/20'
+                ? 'text-slate-600 hover:text-white hover:bg-blue-600 hover:shadow-sm hover:shadow-blue-600/20'
+                : 'text-white/90 hover:text-white hover:bg-blue-600 hover:shadow-sm hover:shadow-blue-600/20'
                 }`}
             >
               {item.label}
@@ -101,16 +102,26 @@ const Navbar = () => {
 
         {/* Right side: CTA + hamburger */}
         <div className="flex items-center gap-3 pr-2">
+          {/* New Get In Touch Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => scrollTo('contact')}
+            className={`hidden sm:block px-6 py-2.5 rounded-full text-base font-bold transition-all shadow-lg border border-transparent ${scrolled ? 'bg-black text-white hover:bg-slate-900' : 'bg-white text-black hover:bg-white/90'}`}
+          >
+            Get In Touch
+          </motion.button>
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => scrollTo('contact')}
             className={`hidden sm:block px-6 py-2.5 rounded-full text-base font-bold transition-all shadow-lg border border-transparent ${scrolled
-                ? 'bg-slate-900 text-white hover:bg-slate-800'
-                : 'bg-white text-evoke-black hover:bg-white/90 hover:border-white shadow-white/10'
+              ? 'bg-slate-900 text-white hover:bg-slate-800'
+              : 'bg-white text-evoke-black hover:bg-white/90 hover:border-white shadow-white/10'
               }`}
           >
-            Get Free Audit
+            Get Free AI Audit
           </motion.button>
 
           {/* Hamburger — mobile only */}
@@ -148,41 +159,55 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile dropdown */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className={`overflow-hidden md:hidden border-t ${scrolled ? 'bg-slate-100 border-black/10 rounded-b-[2rem]' : 'bg-evoke-black border-white/10'}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 md:hidden bg-slate-900/95 backdrop-blur-xl flex flex-col pt-32 px-10"
           >
-            <div className="flex flex-col px-6 pb-8 pt-4 gap-2">
+            <div className="flex flex-col gap-8">
               {navItems.map((item, i) => (
                 <motion.button
                   key={item.id}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06 }}
+                  exit={{ opacity: 0, x: -30 }}
+                  transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   onClick={() => scrollTo(item.id)}
-                  className={`text-left text-lg font-semibold py-3 px-4 rounded-xl transition-all bg-transparent border-none cursor-pointer ${scrolled ? 'text-slate-900 hover:bg-black/5' : 'text-white hover:bg-white/10 hover:text-evoke-accent'
-                    }`}
+                  className="text-left text-4xl font-black text-white hover:text-blue-400 transition-colors uppercase tracking-tighter"
                 >
                   {item.label}
                 </motion.button>
               ))}
+
               <motion.button
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navItems.length * 0.06 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: navItems.length * 0.1 + 0.1 }}
                 onClick={() => scrollTo('contact')}
-                className={`mt-3 px-6 py-3 rounded-full text-sm font-bold transition-all shadow-lg ${scrolled ? 'bg-slate-900 text-white' : 'bg-evoke-accent text-white hover:opacity-90'
-                  }`}
+                className="mt-4 px-10 py-5 bg-white text-black rounded-full text-xl font-black shadow-2xl border border-white/10 uppercase tracking-widest text-center"
+              >
+                Get In Touch
+              </motion.button>
+
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: navItems.length * 0.1 + 0.2 }}
+                onClick={() => scrollTo('contact')}
+                className="mt-2 px-10 py-5 bg-blue-600 text-white rounded-full text-xl font-black shadow-2xl shadow-blue-600/20 uppercase tracking-widest text-center"
               >
                 Get Free Audit
               </motion.button>
             </div>
+
+            {/* Decorative background element for mobile menu */}
+            <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[40%] bg-blue-600/20 rounded-full blur-[100px] pointer-events-none" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -213,7 +238,7 @@ const Hero = () => {
       {/* Background Video */}
       <div className="absolute inset-0 -z-20 bg-black">
         <video
-          src="https://www.damnart.com/wp-content/uploads/2026/02/grok-video-67b35e07-881e-4721-8a2f-bbfacb975c84.mp4"
+          src={heroBg}
           className="w-full h-full object-cover"
           autoPlay
           muted
@@ -238,19 +263,19 @@ const Hero = () => {
             <Zap size={16} className="fill-current" />
             <span>New: AEON AI Framework 2.0</span>
           </motion.div>
-          <motion.h1 variants={itemVariants} className="text-[3rem] sm:text-6xl md:text-[5.5rem] font-black leading-[1] md:leading-[0.9] tracking-tighter mb-8 md:mb-10 text-white">
+          <motion.h1 variants={itemVariants} className="text-[2.75rem] sm:text-6xl md:text-[5.5rem] font-black leading-[1.1] md:leading-[0.9] tracking-tighter mb-8 md:mb-10 text-white">
             Your Business, <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-evoke-accent via-blue-500 to-indigo-600 animate-gradient-x leading-normal md:leading-[0.9]">Automated.</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-evoke-accent via-blue-500 to-indigo-600 animate-gradient-x leading-normal md:leading-[1]">Automated</span>
           </motion.h1>
 
           <motion.div variants={itemVariants} className="space-y-8 mb-12">
             <div className="flex items-center gap-3">
               <div className="w-1.5 h-6 bg-evoke-accent rounded-full" />
-              <p className="text-lg font-black text-white uppercase tracking-widest bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm">U.S. buyers expect instant responses.</p>
+              <p className="text-lg font-black text-white uppercase tracking-widest bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm">U.S. buyers expect instant responses</p>
             </div>
 
             <p className="text-xl text-white/90 max-w-xl leading-relaxed font-medium">
-              We deploy the <span className="text-white font-bold border-b-2 border-evoke-accent">AEON AI Framework</span> via Manychat to transform your DMs into a high-performance sales machine—across Instagram, Facebook, WhatsApp, Telegram, TikTok, and SMS.
+              We deploy the <span className="text-white font-bold border-b-2 border-evoke-accent">AEON AI Framework</span> via Manychat to transform your DMs into a high-performance sales machine—across Instagram, Facebook, WhatsApp, Telegram, TikTok, and SMS
             </p>
           </motion.div>
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full md:w-auto">
@@ -431,7 +456,7 @@ const PainPoints = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-20"
         >
-          <h2 className="text-5xl font-black mb-6 tracking-tight">The Silence in Your Inbox <br /><span className="text-red-500">is Costing You.</span></h2>
+          <h2 className="text-5xl font-black mb-6 tracking-tight">The Silence in Your Inbox <br /><span className="text-red-500">is Costing You</span></h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">Why hire more staff when you can hire an AI agent that speaks 50 languages and works 24/7?</p>
         </motion.div>
         <div className="grid md:grid-cols-3 gap-10">
@@ -587,7 +612,7 @@ const PainPoints = () => {
 //           viewport={{ once: true }}
 //           className="text-center mb-20"
 //         >
-//           <h2 className="text-5xl font-black mb-6 tracking-tight">Tailored for <br /><span className="text-gradient">High-Growth Sectors.</span></h2>
+//           <h2 className="text-5xl font-black mb-6 tracking-tight">Tailored for <br /><span className="text-gradient">High-Growth Sectors</span></h2>
 //           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">Industry-specific solutions designed for maximum ROI and seamless integration.</p>
 //         </motion.div>
 //         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -854,7 +879,7 @@ const CaseStudies = () => {
           <div className="inline-block px-4 py-1 rounded-full bg-evoke-accent/10 text-evoke-accent text-xs font-black uppercase tracking-widest mb-4">
             Success Stories
           </div>
-          <h2 className="text-5xl font-black mb-6 tracking-tight">Proven <span className="text-gradient">Results.</span></h2>
+          <h2 className="text-5xl font-black mb-6 tracking-tight">Proven <span className="text-gradient">Results</span></h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">Real impact for global enterprises scaling with Evoke AI.</p>
         </motion.div>
 
@@ -919,8 +944,8 @@ const FAQItem: React.FC<{ item: any; isOpen: boolean; onClick: () => void }> = (
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       className={`mb-5 overflow-hidden border transition-all duration-500 rounded-[2rem] ${isOpen
-          ? 'border-blue-500 bg-white shadow-xl shadow-blue-100/50 ring-1 ring-blue-100'
-          : 'border-slate-100 bg-white hover:border-blue-200 hover:shadow-lg hover:shadow-slate-200/50'
+        ? 'border-blue-500 bg-white shadow-xl shadow-blue-100/50 ring-1 ring-blue-100'
+        : 'border-slate-100 bg-white hover:border-blue-200 hover:shadow-lg hover:shadow-slate-200/50'
         }`}
     >
       <button
@@ -1051,7 +1076,7 @@ const SocialProof = () => {
           className="text-4xl md:text-5xl font-black tracking-tight"
         >
           50+ Brands Already{' '}
-          <span className="text-gradient">Scaling Faster.</span>
+          <span className="text-gradient">Scaling Faster</span>
         </motion.h2>
       </div>
 
@@ -1109,7 +1134,7 @@ const Footer = () => {
               <img src={evokeLogo} alt="Evoke AI" className="h-14 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform duration-500" />
               <div className="flex flex-col leading-tight">
                 <span className="text-2xl font-black tracking-tight text-white group-hover:text-evoke-accent transition-colors duration-500">EVOKE</span>
-                <span className="text-xs font-semibold text-white/50 tracking-widest">AI Division of DamnArt</span>
+                <span className="text-xs font-semibold text-white/50 tracking-widest">A DIVISION OF DAMNART</span>
               </div>
             </div>
             <p className="text-gray-400 text-lg max-w-sm mb-8 leading-relaxed">
@@ -1130,8 +1155,7 @@ const Footer = () => {
                 { label: "Instagram", href: "#solutions" },
                 { label: "Facebook", href: "#solutions" },
                 { label: "Twitter", href: "#solutions" },
-                { label: "SMS", href: "#solutions" },
-                { label: "Telegram", href: "#solutions" }
+                { label: "SMS/Telegram", href: "#solutions" },
               ].map((link, i) => (
                 <li key={i}>
                   <a href={link.href} className="group flex items-center gap-2 hover:text-white transition-colors">
@@ -1447,7 +1471,7 @@ const CostGraph = () => {
           </span>
           <h2 className="text-5xl md:text-6xl font-black tracking-tight mb-5">
             Tailored for{' '}
-            <span className="text-gradient">High-Growth Sectors.</span>
+            <span className="text-gradient">High-Growth Sectors</span>
           </h2>
           <p className="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
             The AEON Framework cuts operational costs dramatically while multiplying your output — measurable from week one.
@@ -1709,45 +1733,94 @@ const FloatingButtons = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3">
-      <AnimatePresence>
-        {showTop && (
-          <motion.button
-            key="top"
-            initial={{ opacity: 0, scale: 0.5, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.5, y: 20 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="Back to top"
-            className="w-12 h-12 rounded-full bg-evoke-black text-white flex items-center justify-center shadow-xl hover:bg-gray-800 transition-colors"
-          >
-            <ChevronDown size={20} className="rotate-180" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+    <>
+      {/* Right-side floating buttons */}
+      <div className="fixed bottom-20 right-6 z-50 flex flex-col items-center gap-3">
+        <AnimatePresence>
+          {showTop && (
+            <motion.button
+              key="top"
+              initial={{ opacity: 0, scale: 0.5, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.5, y: 20 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              aria-label="Back to top"
+              className="w-12 h-12 rounded-full bg-evoke-black text-white flex items-center justify-center shadow-xl hover:bg-gray-800 transition-colors"
+            >
+              <ChevronDown size={20} className="rotate-180" />
+            </motion.button>
+          )}
+        </AnimatePresence>
 
-      <motion.a
-        href="https://wa.me/917986175240"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="WhatsApp"
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.3 }}
-        whileHover={{ scale: 1.15 }}
-        whileTap={{ scale: 0.9 }}
-        className="w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/40"
-        style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}
-      >
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16 1C7.716 1 1 7.716 1 16c0 2.628.676 5.098 1.858 7.248L1 31l7.97-2.09A14.95 14.95 0 0016 31c8.284 0 15-6.716 15-15S24.284 1 16 1z" fill="white" />
-          <path d="M16 3.5C8.82 3.5 3 9.32 3 16.5c0 2.37.64 4.59 1.76 6.51L3.5 28l5.13-1.35A12.45 12.45 0 0016 28.5c7.18 0 13-5.82 13-13s-5.82-12-13-12z" fill="#25D366" />
-          <path d="M21.5 19.3c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.49-.9-.8-1.5-1.78-1.68-2.08-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.09 3.2 5.08 4.48.71.31 1.27.49 1.7.63.72.23 1.37.2 1.88.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z" fill="white" />
-        </svg>
-      </motion.a>
-    </div>
+        {/* Enquiry Chat-Bubble Button */}
+        <motion.button
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.15 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.93 }}
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          aria-label="Enquire now"
+          className="animate-heartbeat relative"
+          style={{ filter: 'drop-shadow(0 8px 24px rgba(37,99,235,0.45))' }}
+        >
+          {/* Bubble body */}
+          <div
+            className="relative bg-gradient-to-br from-blue-600 to-blue-800 text-white font-black text-xs uppercase tracking-widest px-4 py-3 select-none"
+            style={{
+              borderRadius: '14px 14px 14px 2px',
+              minWidth: 110,
+              textAlign: 'center',
+              lineHeight: 1.3,
+            }}
+          >
+            💬 Enquire
+            <br />
+            <span style={{ letterSpacing: '0.12em' }}>Now</span>
+            {/* Tail */}
+            <span
+              style={{
+                position: 'absolute',
+                bottom: -10,
+                left: 10,
+                width: 0,
+                height: 0,
+                borderLeft: '10px solid transparent',
+                borderRight: '6px solid transparent',
+                borderTop: '12px solid #1d4ed8',
+              }}
+            />
+          </div>
+          {/* Pulse ring */}
+          <span
+            className="absolute inset-0 animate-ping bg-blue-400/25 pointer-events-none"
+            style={{ borderRadius: '14px 14px 14px 2px' }}
+          />
+        </motion.button>
+
+        <motion.a
+          href="https://wa.me/917986175240"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.3 }}
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.9 }}
+          className="w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/40"
+          style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}
+        >
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 1C7.716 1 1 7.716 1 16c0 2.628.676 5.098 1.858 7.248L1 31l7.97-2.09A14.95 14.95 0 0016 31c8.284 0 15-6.716 15-15S24.284 1 16 1z" fill="white" />
+            <path d="M16 3.5C8.82 3.5 3 9.32 3 16.5c0 2.37.64 4.59 1.76 6.51L3.5 28l5.13-1.35A12.45 12.45 0 0016 28.5c7.18 0 13-5.82 13-13s-5.82-12-13-12z" fill="#25D366" />
+            <path d="M21.5 19.3c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.49-.9-.8-1.5-1.78-1.68-2.08-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.09 3.2 5.08 4.48.71.31 1.27.49 1.7.63.72.23 1.37.2 1.88.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z" fill="white" />
+          </svg>
+        </motion.a>
+      </div>
+    </>
   );
 };

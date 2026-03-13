@@ -95,11 +95,14 @@ const SectorCard: React.FC<{ sector: typeof SECTORS[0], index: number }> = ({ se
         </p>
 
         {/* Hover Arrow Indicator */}
-        <div className={`mt-auto transition-all duration-500 flex items-center text-blue-600 font-bold text-xs uppercase tracking-widest
-          ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}>
+        <button
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          className={`mt-auto transition-all duration-500 flex items-center text-blue-600 font-bold text-xs uppercase tracking-widest cursor-pointer bg-transparent border-none p-0
+            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}
+        >
           Get started
           <span className="ml-1.5">→</span>
-        </div>
+        </button>
       </div>
     </div>
   );
@@ -127,7 +130,7 @@ export default function Sectors() {
           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
             Tailored for <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
-              High-Growth Sectors.
+              High-Growth Sectors
             </span>
           </h2>
           <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">

@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* ─── Fluid root font-size ───────────────────────────────────────────────────
+   Scales linearly from 13px (320 px wide) → 16px (1280 px wide).
+   Because Tailwind's font-size utilities use rem, every text size on the page
+   will shrink proportionally when the window is small / minimised.
+   ──────────────────────────────────────────────────────────────────────────── */
+html {
+  font-size: clamp(13px, 0.8125rem + 0.9375vw, 16px);
+}
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-evoke-black: #050505;
@@ -78,4 +87,17 @@
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+/* ─── Heartbeat animation ──────────────────────────────────────────────────── */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%       { transform: scale(1.15); }
+  28%       { transform: scale(1); }
+  42%       { transform: scale(1.12); }
+  56%       { transform: scale(1); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.8s ease-in-out infinite;
 }
