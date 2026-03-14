@@ -26,7 +26,8 @@ import {
   Cpu,
   Shield,
   Menu,
-  X
+  X,
+  HelpCircle
 } from 'lucide-react';
 
 
@@ -39,8 +40,7 @@ const navItems = [
   { label: 'FAQ', id: 'faq' },
 ];
 
-const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
+const Navbar = ({ mobileOpen, setMobileOpen }: { mobileOpen: boolean, setMobileOpen: (open: boolean) => void }) => {
   const [scrolled, setScrolled] = useState(false);
 
   React.useEffect(() => {
@@ -69,7 +69,7 @@ const Navbar = () => {
       {/* Main bar */}
       <div className="py-3 md:py-4 px-4 md:px-8 flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center gap-2 md:gap-4 pl-0 md:pl-4 group cursor-pointer relative">
+        <div className="flex items-center gap-1 md:gap-4 pl-0 md:pl-4 group cursor-pointer relative">
           {/* Shiny Hover Glow */}
           <div className="absolute inset-0 bg-blue-400/20 blur-xl rounded-full scale-0 group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
 
@@ -208,6 +208,19 @@ const Navbar = () => {
 
             {/* Decorative background element for mobile menu */}
             <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[40%] bg-blue-600/20 rounded-full blur-[100px] pointer-events-none" />
+
+            {/* Close button — bottom right */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ delay: navItems.length * 0.1 + 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+              onClick={() => setMobileOpen(false)}
+              className="absolute bottom-10 right-8 w-16 h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 hover:scale-110 transition-all duration-200 shadow-2xl z-50"
+              aria-label="Close menu"
+            >
+              <X size={28} strokeWidth={2.5} />
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -803,7 +816,7 @@ const CaseStudyCard = ({ c, i }: { c: any; i: number; key?: React.Key }) => {
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="group relative perspective-1000 antialiased"
+      className="group relative perspective-1000 antialiased flex-shrink-0 w-[280px] md:w-auto snap-start"
     >
       <div className="bg-white rounded-[2.5rem] overflow-hidden border border-black/5 shadow-sm hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
         <div style={{ transform: "translateZ(40px)" }} className="h-52 overflow-hidden relative">
@@ -896,7 +909,7 @@ const CaseStudies = () => {
               }
             }
           }}
-          className="grid lg:grid-cols-3 gap-10"
+          className="flex lg:grid lg:grid-cols-3 gap-6 md:gap-10 overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory pb-8 scrollbar-hide px-6 md:px-0"
         >
           {cases.map((c, i) => (
             <CaseStudyCard key={i} c={c} i={i} />
@@ -1046,6 +1059,9 @@ const FAQ = () => {
 };
 
 const SocialProof = () => {
+  const [paused, setPaused] = React.useState(false);
+  const [activeCard, setActiveCard] = React.useState<number | null>(null);
+
   const logos = [
     { src: new URL('./astro.png', import.meta.url).href, alt: "Astroremedis" },
     { src: new URL('./med.png', import.meta.url).href, alt: "Meddevices" },
@@ -1054,12 +1070,11 @@ const SocialProof = () => {
     { src: new URL('./itc.png', import.meta.url).href, alt: "ITC India" },
     { src: new URL('./sip.jpeg', import.meta.url).href, alt: "Sipcon" },
   ];
-  // duplicate for seamless loop
   const track = [...logos, ...logos];
 
   return (
-    <section className="py-20 overflow-hidden relative bg-white">
-      <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
+    <section className="py-16 overflow-hidden relative bg-white">
+      <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1073,7 +1088,7 @@ const SocialProof = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-4xl md:text-5xl font-black tracking-tight"
+          className="text-3xl md:text-5xl font-black tracking-tight"
         >
           50+ Brands Already{' '}
           <span className="text-gradient">Scaling Faster</span>
@@ -1082,24 +1097,43 @@ const SocialProof = () => {
 
       {/* Marquee track */}
       <div className="relative">
-        {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#eef2ff] to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#eff6ff] to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-        <div className="animate-marquee gap-8 px-4">
-          {track.map((logo, i) => (
-            <div
-              key={i}
-              className="flex-shrink-0 flex items-center justify-center bg-white rounded-2xl border border-black/5 shadow-sm hover:shadow-lg hover:border-evoke-accent/30 transition-all duration-300 px-10 py-7 mx-4 group"
-              style={{ minWidth: 220 }}
-            >
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                className="h-16 w-40 object-contain grayscale group-hover:grayscale-0 opacity-60 group-hover:opacity-100 transition-all duration-300"
-              />
-            </div>
-          ))}
+        <div
+          className="animate-marquee gap-6 px-3"
+          style={{ animationPlayState: paused ? 'paused' : 'running' }}
+        >
+          {track.map((logo, i) => {
+            const isActive = activeCard === i;
+            return (
+              <div
+                key={i}
+                onMouseEnter={() => { setPaused(true); setActiveCard(i); }}
+                onMouseLeave={() => { setPaused(false); setActiveCard(null); }}
+                className="flex-shrink-0 flex items-center justify-center bg-white rounded-2xl border border-black/5 px-6 md:px-10 py-5 md:py-7 mx-3 cursor-pointer"
+                style={{
+                  minWidth: 160,
+                  transform: isActive ? 'scale(1.12) translateY(-10px)' : 'scale(1) translateY(0px)',
+                  transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
+                  boxShadow: isActive ? '0 20px 40px -10px rgba(37, 99, 235, 0.25)' : '0 1px 3px rgba(0,0,0,0.05)',
+                  borderColor: isActive ? 'rgba(37, 99, 235, 0.3)' : 'rgba(0,0,0,0.05)',
+                  zIndex: isActive ? 20 : 1,
+                  position: 'relative'
+                }}
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-12 md:h-16 w-28 md:w-40 object-contain transition-all duration-300"
+                  style={{
+                    filter: isActive ? 'grayscale(0%)' : 'grayscale(100%)',
+                    opacity: isActive ? 1 : 0.6
+                  }}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1108,19 +1142,12 @@ const SocialProof = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-evoke-black text-white pt-24 pb-12 px-6 md:px-12 lg:px-24 border-t border-white/5 relative overflow-hidden">
+    <footer className="bg-evoke-black text-white pt-14 md:pt-24 pb-10 md:pb-12 px-5 md:px-12 lg:px-24 border-t border-white/5 relative overflow-hidden">
       {/* Animated Shiny Background Effect */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
-          animate={{
-            x: ['-100%', '200%'],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            repeatDelay: 4,
-            ease: "easeInOut",
-          }}
+          animate={{ x: ['-100%', '200%'] }}
+          transition={{ duration: 8, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
           className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-30deg]"
         />
         <div className="absolute top-0 right-0 w-96 h-96 bg-evoke-accent rounded-full blur-[150px] opacity-[0.05]" />
@@ -1128,34 +1155,39 @@ const Footer = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-16 lg:gap-10 mb-16">
-          <div className="col-span-1 lg:col-span-2">
-            <div className="flex items-center gap-3 mb-6 relative group inline-flex cursor-default">
-              <img src={evokeLogo} alt="Evoke AI" className="h-14 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform duration-500" />
-              <div className="flex flex-col leading-tight">
-                <span className="text-2xl font-black tracking-tight text-white group-hover:text-evoke-accent transition-colors duration-500">EVOKE</span>
-                <span className="text-xs font-semibold text-white/50 tracking-widest">A DIVISION OF DAMNART</span>
-              </div>
-            </div>
-            <p className="text-gray-400 text-lg max-w-sm mb-8 leading-relaxed">
-              Enterprise AI Platform for Smarter Business. We transform your existing social channels and DMs into a high-performance, 24/7 automated sales machine.
-            </p>
-            <div className="flex gap-4">
-              <a href="https://www.instagram.com/damnart_marketing_agency?igsh=cDRuZWx6dG56bDkx" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-orange-500 border border-transparent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-pink-500/30 transition-all duration-300"><Instagram size={22} className="text-white" /></a>
-              <a href="https://www.facebook.com/share/1FtnT1dWox/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-blue-600 border border-transparent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-blue-600/30 transition-all duration-300"><Facebook size={22} className="text-white" /></a>
-              <a href="https://wa.me/917986175240" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-green-500 border border-transparent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-green-500/30 transition-all duration-300"><MessageCircle size={22} className="text-white" /></a>
-              <a href="mailto:damart.ai.guladab@gmail.com" className="w-12 h-12 rounded-full bg-evoke-accent border border-transparent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-evoke-accent/30 transition-all duration-300"><Mail size={22} className="text-white" /></a>
+
+        {/* ── Brand block: centered on mobile, left-aligned on desktop ── */}
+        <div className="flex flex-col items-center text-center md:items-start md:text-left mb-10 md:mb-12">
+          <div className="flex items-center gap-1 md:gap-3 mb-4 group cursor-default">
+            <img src={evokeLogo} alt="Evoke AI" className="h-11 md:h-14 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform duration-500" />
+            <div className="flex flex-col leading-tight">
+              <span className="text-xl md:text-2xl font-black tracking-tight text-white group-hover:text-evoke-accent transition-colors duration-500">EVOKE</span>
+              <span className="text-[10px] md:text-xs font-semibold text-white/50 tracking-widest">A DIVISION OF DAMNART</span>
             </div>
           </div>
+          <p className="text-gray-400 text-sm md:text-base max-w-[260px] md:max-w-sm mb-5 leading-relaxed">
+            Enterprise AI Platform — turning your DMs into a 24/7 automated sales machine.
+          </p>
+          {/* Social icons */}
+          <div className="flex gap-3">
+            <a href="https://www.instagram.com/damnart_marketing_agency?igsh=cDRuZWx6dG56bDkx" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-orange-500 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-pink-500/30 transition-all duration-300"><Instagram size={18} className="text-white" /></a>
+            <a href="https://www.facebook.com/share/1FtnT1dWox/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-blue-600/30 transition-all duration-300"><Facebook size={18} className="text-white" /></a>
+            <a href="https://wa.me/917986175240" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-green-500/30 transition-all duration-300"><MessageCircle size={18} className="text-white" /></a>
+            <a href="https://mail.google.com/mail/?view=cm&to=damart.ai.guladab@gmail.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-evoke-accent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-evoke-accent/30 transition-all duration-300 cursor-pointer"><Mail size={18} className="text-white" /></a>
+          </div>
+        </div>
 
-          <div className="lg:col-span-1">
-            <h4 className="text-lg font-black mb-6 text-white tracking-wide">Solutions</h4>
-            <ul className="space-y-4 text-gray-400 text-base font-medium">
+        {/*  Nav columns: 2-col grid on mobile, 4 even cols desktop  */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 mb-10">
+
+          <div>
+            <h4 className="text-xs md:text-sm font-black mb-4 text-white tracking-widest uppercase">Solutions</h4>
+            <ul className="space-y-3 text-gray-400 text-sm font-medium">
               {[
                 { label: "Instagram", href: "#solutions" },
                 { label: "Facebook", href: "#solutions" },
-                { label: "Twitter", href: "#solutions" },
                 { label: "SMS/Telegram", href: "#solutions" },
+                { label: "TikTok", href: "#solutions" },
               ].map((link, i) => (
                 <li key={i}>
                   <a href={link.href} className="group flex items-center gap-2 hover:text-white transition-colors">
@@ -1167,14 +1199,14 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="lg:col-span-1">
-            <h4 className="text-lg font-black mb-6 text-white tracking-wide">Quick Links</h4>
-            <ul className="space-y-4 text-gray-400 text-base font-medium">
+          <div>
+            <h4 className="text-xs md:text-sm font-black mb-4 text-white tracking-widest uppercase">Quick Links</h4>
+            <ul className="space-y-3 text-gray-400 text-sm font-medium">
               {[
                 { label: "Solutions", href: "#solutions" },
                 { label: "Industries", href: "#industries" },
                 { label: "Process", href: "#process" },
-                { label: "Results", href: "#results" }
+                { label: "Results", href: "#results" },
               ].map((link, i) => (
                 <li key={i}>
                   <a href={link.href} className="group flex items-center gap-2 hover:text-white transition-colors">
@@ -1186,29 +1218,30 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="lg:col-span-2">
-            <h4 className="text-lg font-black mb-6 text-white tracking-wide">Contact Us</h4>
-            <ul className="space-y-5 text-gray-400 text-base font-medium">
+          {/* Contact  spans full width on mobile */}
+          <div className="col-span-2 md:col-span-2">
+            <h4 className="text-xs md:text-sm font-black mb-4 text-white tracking-widest uppercase">Contact Us</h4>
+            <ul className="space-y-3 text-gray-400 text-sm font-medium">
               <li>
-                <a href="tel:+917986175240" className="group flex items-center gap-4 hover:text-white transition-colors p-2 -ml-2 rounded-xl hover:bg-white/5">
-                  <div className="w-10 h-10 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
-                    <Phone size={18} className="text-evoke-accent group-hover:text-white transition-colors" />
+                <a href="tel:+917986175240" className="group flex items-center gap-3 hover:text-white transition-colors rounded-xl hover:bg-white/5 py-1">
+                  <div className="w-8 h-8 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
+                    <Phone size={14} className="text-evoke-accent group-hover:text-white transition-colors" />
                   </div>
                   <span>+91 7986175240</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:damart.ai.guladab@gmail.com" className="group flex items-center gap-4 hover:text-white transition-colors p-2 -ml-2 rounded-xl hover:bg-white/5 break-all">
-                  <div className="w-10 h-10 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
-                    <Mail size={18} className="text-evoke-accent group-hover:text-white transition-colors" />
+                <a href="https://mail.google.com/mail/?view=cm&to=damart.ai.guladab@gmail.com" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 hover:text-white transition-colors rounded-xl hover:bg-white/5 py-1 cursor-pointer">
+                  <div className="w-8 h-8 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
+                    <Mail size={14} className="text-evoke-accent group-hover:text-white transition-colors" />
                   </div>
-                  <span>damart.ai.guladab@gmail.com</span>
+                  <span className="break-all">damart.ai.guladab@gmail.com</span>
                 </a>
               </li>
               <li>
-                <a href="https://www.damnart.com/" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 hover:text-white transition-colors p-2 -ml-2 rounded-xl hover:bg-white/5">
-                  <div className="w-10 h-10 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
-                    <Globe size={18} className="text-evoke-accent group-hover:text-white transition-colors" />
+                <a href="https://www.damnart.com/" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 hover:text-white transition-colors rounded-xl hover:bg-white/5 py-1">
+                  <div className="w-8 h-8 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
+                    <Globe size={14} className="text-evoke-accent group-hover:text-white transition-colors" />
                   </div>
                   <span>www.damnart.com</span>
                 </a>
@@ -1217,13 +1250,13 @@ const Footer = () => {
           </div>
 
         </div>
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm font-medium">
+
+        {/* ── Bottom bar ── */}
+        <div className="pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-gray-500 text-xs md:text-sm font-medium text-center">
           <span>© 2026 EVOKE AI Platform. Premium automation by DamnArt. All rights reserved.</span>
-          <div className="flex gap-6">
-            <a href="https://www.damnart.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform hover:after:scale-x-100 hover:after:origin-bottom-left">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform hover:after:scale-x-100 hover:after:origin-bottom-left">Terms of Service</a>
-          </div>
+          <a href="https://www.damnart.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy Policy</a>
         </div>
+
       </div>
     </footer>
   );
@@ -1286,17 +1319,32 @@ const EvokeAdvantage = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8"
         >
           {advantages.map((adv, i) => (
             <motion.div
               key={i}
               variants={item}
               whileHover={{ y: -10 }}
-              className="group relative p-10 bg-white rounded-[3rem] border border-black/5 shadow-sm hover:shadow-2xl transition-all duration-500 h-full overflow-hidden"
+              className="group relative bg-white rounded-2xl md:rounded-[3rem] border border-black/5 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${adv.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-              <div className="relative z-10">
+              {/* Mobile: compact horizontal row */}
+              <div className="relative z-10 flex items-center gap-4 p-4 md:hidden">
+                <div className="w-12 h-12 shrink-0 bg-white rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-500">
+                  {adv.icon}
+                </div>
+                <div>
+                  <h3 className="text-base font-black tracking-tight group-hover:text-evoke-accent transition-colors leading-tight mb-1">
+                    {adv.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm font-medium leading-snug">
+                    {adv.desc}
+                  </p>
+                </div>
+              </div>
+              {/* Desktop: tall vertical card */}
+              <div className="relative z-10 hidden md:block p-10 h-full">
                 <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg mb-8 group-hover:scale-110 transition-transform duration-500">
                   {adv.icon}
                 </div>
@@ -1355,9 +1403,13 @@ const AnimatedGraph = ({
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay }}
-      className={`relative ${bgClass} rounded-3xl p-8 border border-black/5 shadow-xl shadow-blue-100/40`}
+      className={`relative ${bgClass} rounded-3xl p-4 md:p-8 border border-black/5 shadow-xl shadow-blue-100/40`}
     >
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 -rotate-90 text-[11px] font-black uppercase tracking-widest text-gray-400">
+      {/* Label: above chart on mobile, rotated on left for desktop */}
+      <span className="block md:hidden text-center text-[11px] font-black uppercase tracking-widest text-gray-400 mb-3">
+        {yAxisLabel}
+      </span>
+      <span className="hidden md:block absolute left-3 top-1/2 -translate-y-1/2 -rotate-90 text-[11px] font-black uppercase tracking-widest text-gray-400">
         {yAxisLabel}
       </span>
 
@@ -1478,50 +1530,50 @@ const CostGraph = () => {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — Operational Cost Graph (downward) */}
-          <AnimatedGraph
-            pathD={costPath}
-            areaD={costArea}
-            lineGradId="lineGrad"
-            areaGradId="areaGrad"
-            gradFrom="#3B82F6"
-            gradTo="#10B981"
-            dotStart={{ cx: 40, cy: 30 }}
-            dotEnd={{ cx: W - 40, cy: 220 }}
-            labelStart={{ x: 48, y: 10, rx: 6, ry: 6, text: "Manual Work", textX: 103, textY: 28, color: "#3B82F6", width: 110 }}
-            labelEnd={{ x: W - 175, y: 226, rx: 6, ry: 6, text: "Automated Workflow", textX: W - 105, textY: 244, color: "#10B981", width: 140 }}
-            yAxisLabel="Operational Cost"
-            bgClass="bg-gradient-to-br from-slate-50 to-blue-50"
-            delay={0}
-          />
+        <div className="grid lg:grid-cols-2 gap-16 items-start mb-16">
+          {/* Left — Operational Cost Graph + Caption */}
+          <div className="flex flex-col gap-4">
+            <AnimatedGraph
+              pathD={costPath}
+              areaD={costArea}
+              lineGradId="lineGrad"
+              areaGradId="areaGrad"
+              gradFrom="#3B82F6"
+              gradTo="#10B981"
+              dotStart={{ cx: 40, cy: 30 }}
+              dotEnd={{ cx: W - 40, cy: 220 }}
+              labelStart={{ x: 48, y: 10, rx: 6, ry: 6, text: "Manual Work", textX: 103, textY: 28, color: "#3B82F6", width: 110 }}
+              labelEnd={{ x: W - 175, y: 226, rx: 6, ry: 6, text: "Automated Workflow", textX: W - 105, textY: 244, color: "#10B981", width: 140 }}
+              yAxisLabel="Operational Cost"
+              bgClass="bg-gradient-to-br from-slate-50 to-blue-50"
+              delay={0}
+            />
+            <p className="text-center text-sm text-gray-500 font-medium px-2">
+              <span className="font-black text-evoke-black">Operational Costs</span> drop sharply once the AEON AI Framework takes over repetitive workflows.
+            </p>
+          </div>
 
-          {/* Right — ROI / Performance Graph (upward) */}
-          <AnimatedGraph
-            pathD={roiPath}
-            areaD={roiArea}
-            lineGradId="roiLineGrad"
-            areaGradId="roiAreaGrad"
-            gradFrom="#6366F1"
-            gradTo="#3B82F6"
-            dotStart={{ cx: 40, cy: 220 }}
-            dotEnd={{ cx: W - 40, cy: 30 }}
-            labelStart={{ x: 48, y: 226, rx: 6, ry: 6, text: "Before Automation", textX: 122, textY: 244, color: "#6366F1", width: 148 }}
-            labelEnd={{ x: W - 178, y: 10, rx: 6, ry: 6, text: "After Automation", textX: W - 108, textY: 28, color: "#3B82F6", width: 140 }}
-            yAxisLabel="ROI / Performance"
-            bgClass="bg-gradient-to-br from-blue-50 to-indigo-50"
-            delay={0.15}
-          />
-        </div>
-
-        {/* Graph captions */}
-        <div className="grid lg:grid-cols-2 gap-16 mt-5 mb-16 px-2">
-          <p className="text-center text-sm text-gray-500 font-medium">
-            <span className="font-black text-evoke-black">Operational Costs</span> drop sharply once the AEON AI Framework takes over repetitive workflows.
-          </p>
-          <p className="text-center text-sm text-gray-500 font-medium">
-            <span className="font-black text-evoke-black">ROI & Performance</span> climb steeply as AI handles leads, replies, and follow-ups 24/7.
-          </p>
+          {/* Right — ROI / Performance Graph + Caption */}
+          <div className="flex flex-col gap-4">
+            <AnimatedGraph
+              pathD={roiPath}
+              areaD={roiArea}
+              lineGradId="roiLineGrad"
+              areaGradId="roiAreaGrad"
+              gradFrom="#6366F1"
+              gradTo="#3B82F6"
+              dotStart={{ cx: 40, cy: 220 }}
+              dotEnd={{ cx: W - 40, cy: 30 }}
+              labelStart={{ x: 48, y: 226, rx: 6, ry: 6, text: "Before Automation", textX: 122, textY: 244, color: "#6366F1", width: 148 }}
+              labelEnd={{ x: W - 178, y: 10, rx: 6, ry: 6, text: "After Automation", textX: W - 108, textY: 28, color: "#3B82F6", width: 140 }}
+              yAxisLabel="ROI / Performance"
+              bgClass="bg-gradient-to-br from-blue-50 to-indigo-50"
+              delay={0.15}
+            />
+            <p className="text-center text-sm text-gray-500 font-medium px-2">
+              <span className="font-black text-evoke-black">ROI & Performance</span> climb steeply as AI handles leads, replies, and follow-ups 24/7.
+            </p>
+          </div>
         </div>
 
         {/* Bottom stat strip */}
@@ -1559,9 +1611,11 @@ const CostGraph = () => {
 
 
 export default function App() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <div className="min-h-screen">
-      <Navbar />
+      <Navbar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
       <Hero />
       <PainPoints />
       <ScrollytellingSection />
@@ -1618,6 +1672,7 @@ export default function App() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
+              className="hidden md:block"
             >
               <h2 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95]">
                 Ready to
@@ -1717,89 +1772,62 @@ export default function App() {
         </div>
       </section>
 
-      <FloatingButtons />
+      <FloatingButtons mobileOpen={mobileOpen} />
       <Footer />
     </div>
   );
 }
 
-const FloatingButtons = () => {
-  const [showTop, setShowTop] = React.useState(false);
-
-  React.useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 300);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+const FloatingButtons = ({ mobileOpen }: { mobileOpen: boolean }) => {
+  if (mobileOpen) return null;
 
   return (
     <>
       {/* Right-side floating buttons */}
       <div className="fixed bottom-20 right-6 z-50 flex flex-col items-center gap-3">
-        <AnimatePresence>
-          {showTop && (
-            <motion.button
-              key="top"
-              initial={{ opacity: 0, scale: 0.5, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.5, y: 20 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              aria-label="Back to top"
-              className="w-12 h-12 rounded-full bg-evoke-black text-white flex items-center justify-center shadow-xl hover:bg-gray-800 transition-colors"
-            >
-              <ChevronDown size={20} className="rotate-180" />
-            </motion.button>
-          )}
-        </AnimatePresence>
 
-        {/* Enquiry Chat-Bubble Button */}
-        <motion.button
+        {/* Enquiry "Cartoon Thought Bubble" Button */}
+        <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.15 }}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.93 }}
+          animate={{
+            opacity: 1,
+            scale: 1
+          }}
+          transition={{
+            delay: 0.15,
+            type: 'spring',
+            stiffness: 300,
+            damping: 20
+          }}
+          className="relative group cursor-pointer mr-6 self-end"
           onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          aria-label="Enquire now"
-          className="animate-heartbeat relative"
-          style={{ filter: 'drop-shadow(0 8px 24px rgba(37,99,235,0.45))' }}
         >
-          {/* Bubble body */}
-          <div
-            className="relative bg-gradient-to-br from-blue-600 to-blue-800 text-white font-black text-xs uppercase tracking-widest px-4 py-3 select-none"
-            style={{
-              borderRadius: '14px 14px 14px 2px',
-              minWidth: 110,
-              textAlign: 'center',
-              lineHeight: 1.3,
-            }}
-          >
-            💬 Enquire
-            <br />
-            <span style={{ letterSpacing: '0.12em' }}>Now</span>
-            {/* Tail */}
-            <span
+          {/* Main Bubble (Label) */}
+          <div className="absolute bottom-14 right-6 w-24 h-24 rounded-full bg-white/95 backdrop-blur-md flex flex-col items-center justify-center shadow-2xl border border-blue-100/50 group-hover:scale-110 transition-transform duration-300 z-10">
+            <span className="text-blue-600 font-black text-[12px] uppercase tracking-[0.12em] leading-tight text-center">
+              Enquire
+              <br />
+              Now
+            </span>
+
+            {/* Solid Pointer Tail (Speech Bubble Style) */}
+            <div
+              className="absolute -bottom-2 right-5 w-6 h-6 bg-white/95 border-r border-b border-blue-100/50"
               style={{
-                position: 'absolute',
-                bottom: -10,
-                left: 10,
-                width: 0,
-                height: 0,
-                borderLeft: '10px solid transparent',
-                borderRight: '6px solid transparent',
-                borderTop: '12px solid #1d4ed8',
+                clipPath: 'polygon(0% 0%, 100% 0%, 0% 100%)',
+                transform: 'rotate(50deg)'
               }}
             />
           </div>
-          {/* Pulse ring */}
-          <span
-            className="absolute inset-0 animate-ping bg-blue-400/25 pointer-events-none"
-            style={{ borderRadius: '14px 14px 14px 2px' }}
-          />
-        </motion.button>
+
+          {/* Circle (The Brain) */}
+          <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 flex items-center justify-center text-white border-2 border-white/30 shadow-lg">
+            <HelpCircle size={32} className="relative z-10" />
+
+            {/* Subtle inner pulse */}
+            <div className="absolute inset-0 rounded-full animate-ping bg-blue-400/20 pointer-events-none" />
+          </div>
+        </motion.div>
 
         <motion.a
           href="https://wa.me/917986175240"
