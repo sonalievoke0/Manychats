@@ -69,7 +69,7 @@ const Navbar = ({ mobileOpen, setMobileOpen }: { mobileOpen: boolean, setMobileO
       {/* Main bar */}
       <div className="py-3 md:py-4 px-4 md:px-8 flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center gap-1 md:gap-4 pl-0 md:pl-4 group cursor-pointer relative">
+        <div className="flex items-center gap-2 md:gap-4 pl-0 md:pl-4 group cursor-pointer relative">
           {/* Shiny Hover Glow */}
           <div className="absolute inset-0 bg-blue-400/20 blur-xl rounded-full scale-0 group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
 
@@ -1784,70 +1784,64 @@ const FloatingButtons = ({ mobileOpen }: { mobileOpen: boolean }) => {
   return (
     <>
       {/* Right-side floating buttons */}
-      <div className="fixed bottom-20 right-6 z-50 flex flex-col items-center gap-3">
-
-        {/* Enquiry "Cartoon Thought Bubble" Button */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{
-            opacity: 1,
-            scale: 1
-          }}
-          transition={{
-            delay: 0.15,
-            type: 'spring',
-            stiffness: 300,
-            damping: 20
-          }}
-          className="relative group cursor-pointer mr-6 self-end"
-          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          {/* Main Bubble (Label) */}
-          <div className="absolute bottom-14 right-6 w-24 h-24 rounded-full bg-white/95 backdrop-blur-md flex flex-col items-center justify-center shadow-2xl border border-blue-100/50 group-hover:scale-110 transition-transform duration-300 z-10">
-            <span className="text-blue-600 font-black text-[12px] uppercase tracking-[0.12em] leading-tight text-center">
-              Enquire
-              <br />
-              Now
-            </span>
-
-            {/* Solid Pointer Tail (Speech Bubble Style) */}
-            <div
-              className="absolute -bottom-2 right-5 w-6 h-6 bg-white/95 border-r border-b border-blue-100/50"
-              style={{
-                clipPath: 'polygon(0% 0%, 100% 0%, 0% 100%)',
-                transform: 'rotate(50deg)'
-              }}
-            />
-          </div>
-
-          {/* Circle (The Brain) */}
-          <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 flex items-center justify-center text-white border-2 border-white/30 shadow-lg">
-            <HelpCircle size={32} className="relative z-10" />
-
-            {/* Subtle inner pulse */}
-            <div className="absolute inset-0 rounded-full animate-ping bg-blue-400/20 pointer-events-none" />
-          </div>
-        </motion.div>
+      <div className="fixed bottom-4 right-4 md:bottom-10 md:right-6 z-50 flex flex-col items-end gap-5">
 
         <motion.a
           href="https://wa.me/917986175240"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="WhatsApp"
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.3 }}
-          whileHover={{ scale: 1.15 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.15 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/40"
+          className="w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-2xl shadow-green-500/40"
           style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}
         >
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 1C7.716 1 1 7.716 1 16c0 2.628.676 5.098 1.858 7.248L1 31l7.97-2.09A14.95 14.95 0 0016 31c8.284 0 15-6.716 15-15S24.284 1 16 1z" fill="white" />
             <path d="M16 3.5C8.82 3.5 3 9.32 3 16.5c0 2.37.64 4.59 1.76 6.51L3.5 28l5.13-1.35A12.45 12.45 0 0016 28.5c7.18 0 13-5.82 13-13s-5.82-12-13-12z" fill="#25D366" />
             <path d="M21.5 19.3c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.49-.9-.8-1.5-1.78-1.68-2.08-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.09 3.2 5.08 4.48.71.31 1.27.49 1.7.63.72.23 1.37.2 1.88.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z" fill="white" />
           </svg>
         </motion.a>
+
+        {/* Enquiry "Cartoon Thought Bubble" Button */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{
+            opacity: 1,
+            x: 0
+          }}
+          transition={{
+            delay: 0.3,
+            type: 'spring',
+            stiffness: 300,
+            damping: 20
+          }}
+          className="relative group cursor-pointer"
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+        >
+          {/* Main Bubble (Label) — Positioned to the top-left of the button */}
+          <div className="absolute bottom-8 right-8 w-auto h-auto min-w-[100px] md:min-w-[120px] rounded-2xl bg-white/95 backdrop-blur-md flex flex-col items-center justify-center shadow-2xl border border-blue-100/50 group-hover:scale-110 transition-transform duration-300 z-10 py-3 px-4">
+            <span className="text-blue-600 font-black text-[10px] md:text-[12px] uppercase tracking-[0.05em] md:tracking-[0.12em] leading-tight text-center whitespace-nowrap">
+              Enquire Now
+            </span>
+
+            {/* Pointer Tail pointing diagonally to the button below-right */}
+            <div
+              className="absolute -bottom-1 -right-1 w-3 h-3 bg-white/95 border-b border-r border-blue-100/50 rotate-45"
+            />
+          </div>
+
+          {/* Business Circle (The Action Button) */}
+          <div className="relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 flex items-center justify-center text-white border-2 border-white/30 shadow-lg">
+            <HelpCircle className="w-5 h-5 md:w-7 md:h-7 relative z-10" />
+
+            {/* Subtle inner pulse */}
+            <div className="absolute inset-0 rounded-full animate-ping bg-blue-400/20 pointer-events-none" />
+          </div>
+        </motion.div>
       </div>
     </>
   );
