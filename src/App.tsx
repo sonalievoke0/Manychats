@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import damnartLogo from './damnart.png';
 import evokeLogo from './evoke-BzE_NnH1 (1).png';
 import heroBg from './hero page background.mp4';
@@ -27,8 +27,15 @@ import {
   Shield,
   Menu,
   X,
-  HelpCircle
+  HelpCircle,
+  MapPin,
+  ArrowUp
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
+import hourglass from './hourglass.png';
+import peopleChart from './people-chart.png';
+import support24 from './support-24.png';
+
 
 
 
@@ -309,7 +316,7 @@ const Hero = () => {
             </motion.button>
           </motion.div>
           <motion.div variants={itemVariants} className="mt-16 flex items-center gap-6">
-            <div className="flex -space-x-3">
+            <div className="flex gap-2 md:gap-3">
               {[1, 2, 3, 4, 5].map(i => (
                 <motion.div
                   key={i}
@@ -318,7 +325,7 @@ const Hero = () => {
                 >
                   <img
                     src={`https://picsum.photos/seed/user${i}/80/80`}
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-white shadow-lg cursor-pointer object-cover"
+                    className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 md:border-4 border-white shadow-lg cursor-pointer object-cover"
                     alt="User"
                     referrerPolicy="no-referrer"
                   />
@@ -442,19 +449,19 @@ const PainPoints = () => {
     {
       title: "The 5-Minute Rule",
       desc: "Response probability drops by 400% after just 5 minutes of silence.",
-      icon: <Clock className="text-red-500" />,
+      icon: <img src={hourglass} alt="5-Minute Rule" className="w-full h-full object-contain" />,
       color: "from-red-500/10 to-red-500/5"
     },
     {
       title: "The 'Ghosting' Epidemic",
       desc: "70% of U.S. customers switch to a competitor if their first inquiry isn't acknowledged instantly.",
-      icon: <Users className="text-orange-500" />,
+      icon: <img src={peopleChart} alt="Ghosting Epidemic" className="w-full h-full object-contain" />,
       color: "from-orange-500/10 to-orange-500/5"
     },
     {
       title: "The Labor Trap",
       desc: "Hiring a 24/7 human team costs $15,000+ per month. AI never takes a day off.",
-      icon: <TrendingUp className="text-blue-500" />,
+      icon: <img src={support24} alt="Labor Trap" className="w-full h-full object-contain" />,
       color: "from-blue-500/10 to-blue-500/5"
     }
   ];
@@ -492,7 +499,7 @@ const PainPoints = () => {
                 whileHover={{ rotate: 15, scale: 1.2 }}
                 className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-8 shadow-inner relative z-10"
               >
-                {React.cloneElement(p.icon as React.ReactElement, { size: 32 })}
+                {React.isValidElement(p.icon) && (p.icon.type === 'img' ? p.icon : React.cloneElement(p.icon as React.ReactElement, { size: 32 }))}
               </motion.div>
               <div className="relative z-10">
                 <h3 className="text-2xl font-black mb-4 tracking-tight">{p.title}</h3>
@@ -1062,7 +1069,13 @@ const SocialProof = () => {
   const [paused, setPaused] = React.useState(false);
   const [activeCard, setActiveCard] = React.useState<number | null>(null);
 
-  const logos = [
+  interface Logo {
+    src: string;
+    alt: string;
+    scale?: number;
+  }
+
+  const logos: Logo[] = [
     { src: new URL('./astro.png', import.meta.url).href, alt: "Astroremedis" },
     { src: new URL('./med.png', import.meta.url).href, alt: "Meddevices" },
     { src: new URL('./edu.jpeg', import.meta.url).href, alt: "Eduonix" },
@@ -1111,10 +1124,10 @@ const SocialProof = () => {
                 key={i}
                 onMouseEnter={() => { setPaused(true); setActiveCard(i); }}
                 onMouseLeave={() => { setPaused(false); setActiveCard(null); }}
-                className="flex-shrink-0 flex items-center justify-center bg-white rounded-2xl border border-black/5 px-6 md:px-10 py-5 md:py-7 mx-3 cursor-pointer"
+                className="flex-shrink-0 flex items-center justify-center bg-white rounded-2xl border border-black/5 px-6 md:px-8 py-6 md:py-10 mx-4 cursor-pointer"
                 style={{
-                  minWidth: 160,
-                  transform: isActive ? 'scale(1.12) translateY(-10px)' : 'scale(1) translateY(0px)',
+                  minWidth: 320,
+                  transform: isActive ? 'scale(1.12) translateY(-10px)' : `scale(${logo.scale || 1}) translateY(0px)`,
                   transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
                   boxShadow: isActive ? '0 20px 40px -10px rgba(37, 99, 235, 0.25)' : '0 1px 3px rgba(0,0,0,0.05)',
                   borderColor: isActive ? 'rgba(37, 99, 235, 0.3)' : 'rgba(0,0,0,0.05)',
@@ -1125,7 +1138,7 @@ const SocialProof = () => {
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="h-12 md:h-16 w-28 md:w-40 object-contain transition-all duration-300"
+                  className="h-14 md:h-20 w-32 md:w-52 object-contain transition-all duration-300"
                   style={{
                     filter: isActive ? 'grayscale(0%)' : 'grayscale(100%)',
                     opacity: isActive ? 1 : 0.6
@@ -1142,7 +1155,7 @@ const SocialProof = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-evoke-black text-white pt-14 md:pt-24 pb-10 md:pb-12 px-5 md:px-12 lg:px-24 border-t border-white/5 relative overflow-hidden">
+    <footer className="bg-evoke-black text-white pt-16 md:pt-24 pb-12 px-6 md:px-12 lg:px-24 border-t border-white/5 relative overflow-hidden font-sans">
       {/* Animated Shiny Background Effect */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
@@ -1155,108 +1168,220 @@ const Footer = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8">
 
-        {/* ── Brand block: centered on mobile, left-aligned on desktop ── */}
-        <div className="flex flex-col items-center text-center md:items-start md:text-left mb-10 md:mb-12">
-          <div className="flex items-center gap-1 md:gap-3 mb-4 group cursor-default">
-            <img src={evokeLogo} alt="Evoke AI" className="h-11 md:h-14 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform duration-500" />
-            <div className="flex flex-col leading-tight">
-              <span className="text-xl md:text-2xl font-black tracking-tight text-white group-hover:text-evoke-accent transition-colors duration-500">EVOKE</span>
-              <span className="text-[10px] md:text-xs font-semibold text-white/50 tracking-widest">A DIVISION OF DAMNART</span>
+          {/* Column 1: Brand & Links */}
+          <div className="space-y-12">
+            <div>
+              <div className="flex items-center gap-3 mb-6 group cursor-default">
+                <img src={evokeLogo} alt="Evoke AI" className="h-12 md:h-14 w-auto object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-500" />
+                <div className="flex flex-col leading-tight">
+                  <span className="text-3xl font-black tracking-tight text-white group-hover:text-evoke-accent transition-colors duration-500 uppercase">EVOKE AI</span>
+                  <span className="text-sm font-semibold text-white/50 tracking-widest uppercase">A Division of DamnArt</span>
+                </div>
+              </div>
+              <p className="text-gray-400 text-lg max-w-sm mb-6 leading-relaxed">
+                Enterprise AI Platform — turning your DMs into a 24/7 automated sales machine.
+              </p>
+              <div className="flex gap-4">
+                <a href="https://www.instagram.com/damnart_marketing_agency?igsh=cDRuZWx6dG56bDkx" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-orange-500 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-pink-500/30 transition-all duration-300"><Instagram size={18} className="text-white" /></a>
+                <a href="https://www.facebook.com/share/1FtnT1dWox/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-blue-600/30 transition-all duration-300"><Facebook size={18} className="text-white" /></a>
+                <a href="https://wa.me/917986175240" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-green-500/30 transition-all duration-300"><MessageCircle size={18} className="text-white" /></a>
+                <a href="https://mail.google.com/mail/?view=cm&to=damart.ai.guladab@gmail.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-evoke-accent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-evoke-accent/30 transition-all duration-300 cursor-pointer"><Mail size={18} className="text-white" /></a>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-sm font-black mb-6 text-white tracking-widest uppercase border-b border-white/5 pb-2">Solutions</h4>
+                <ul className="space-y-4 text-gray-400 text-base font-medium">
+                  {["Instagram", "Facebook", "SMS/Telegram", "TikTok"].map((label, i) => (
+                    <li key={i}>
+                      <a href="#solutions" className="group flex items-center gap-2 hover:text-white transition-colors">
+                        <span className="w-0 h-[2px] bg-evoke-accent transition-all duration-300 group-hover:w-3 rounded-full"></span>
+                        <span className="group-hover:translate-x-1 transition-transform duration-300">{label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-sm font-black mb-6 text-white tracking-widest uppercase border-b border-white/5 pb-2">Quick Links</h4>
+                <ul className="space-y-4 text-gray-400 text-base font-medium">
+                  {["Industries", "Process", "Results", "Audit"].map((label, i) => (
+                    <li key={i}>
+                      <a href={`#${label.toLowerCase()}`} className="group flex items-center gap-2 hover:text-white transition-colors">
+                        <span className="w-0 h-[2px] bg-blue-500 transition-all duration-300 group-hover:w-3 rounded-full"></span>
+                        <span className="group-hover:translate-x-1 transition-transform duration-300">{label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-          <p className="text-gray-400 text-sm md:text-base max-w-[260px] md:max-w-sm mb-5 leading-relaxed">
-            Enterprise AI Platform — turning your DMs into a 24/7 automated sales machine.
-          </p>
-          {/* Social icons */}
-          <div className="flex gap-3">
-            <a href="https://www.instagram.com/damnart_marketing_agency?igsh=cDRuZWx6dG56bDkx" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-orange-500 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-pink-500/30 transition-all duration-300"><Instagram size={18} className="text-white" /></a>
-            <a href="https://www.facebook.com/share/1FtnT1dWox/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-blue-600/30 transition-all duration-300"><Facebook size={18} className="text-white" /></a>
-            <a href="https://wa.me/917986175240" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-green-500/30 transition-all duration-300"><MessageCircle size={18} className="text-white" /></a>
-            <a href="https://mail.google.com/mail/?view=cm&to=damart.ai.guladab@gmail.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-evoke-accent flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-evoke-accent/30 transition-all duration-300 cursor-pointer"><Mail size={18} className="text-white" /></a>
-          </div>
-        </div>
 
-        {/*  Nav columns: 2-col grid on mobile, 4 even cols desktop  */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 mb-10">
-
-          <div>
-            <h4 className="text-xs md:text-sm font-black mb-4 text-white tracking-widest uppercase">Solutions</h4>
-            <ul className="space-y-3 text-gray-400 text-sm font-medium">
-              {[
-                { label: "Instagram", href: "#solutions" },
-                { label: "Facebook", href: "#solutions" },
-                { label: "SMS/Telegram", href: "#solutions" },
-                { label: "TikTok", href: "#solutions" },
-              ].map((link, i) => (
-                <li key={i}>
-                  <a href={link.href} className="group flex items-center gap-2 hover:text-white transition-colors">
-                    <span className="w-0 h-[2px] bg-evoke-accent transition-all duration-300 group-hover:w-3 rounded-full"></span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
+          {/* Column 2: Contact Us */}
+          <div className="lg:border-l lg:border-white/5 lg:pl-8 space-y-12">
+            <div>
+              <h4 className="text-base font-black mb-8 text-white tracking-widest uppercase flex items-center gap-2">
+                <Phone size={18} className="text-evoke-accent" />
+                Contact Us
+              </h4>
+              <div className="flex flex-col gap-4">
+                {[
+                  { icon: <Phone size={14} />, label: "+91 7986175240", href: "tel:+917986175240" },
+                  { icon: <Mail size={14} />, label: "damart.ai.guladab@gmail.com", href: "https://mail.google.com/mail/?view=cm&to=damart.ai.guladab@gmail.com" },
+                  { icon: <Globe size={14} />, label: "www.damnart.com", href: "https://www.damnart.com/" },
+                ].map((item, i) => (
+                  <a key={i} href={item.href} target={item.href.startsWith('http') ? "_blank" : undefined} rel="noopener noreferrer" className="group flex items-center gap-4 hover:text-white transition-colors bg-white/5 p-4 rounded-2xl border border-white/5 hover:border-evoke-accent/30">
+                    <div className="w-12 h-12 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
+                      {React.cloneElement(item.icon as React.ReactElement, { size: 18, className: "text-evoke-accent group-hover:text-white transition-colors" })}
+                    </div>
+                    <span className="font-bold text-base truncate">{item.label}</span>
                   </a>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h4 className="text-xs md:text-sm font-black mb-4 text-white tracking-widest uppercase">Quick Links</h4>
-            <ul className="space-y-3 text-gray-400 text-sm font-medium">
-              {[
-                { label: "Solutions", href: "#solutions" },
-                { label: "Industries", href: "#industries" },
-                { label: "Process", href: "#process" },
-                { label: "Results", href: "#results" },
-              ].map((link, i) => (
-                <li key={i}>
-                  <a href={link.href} className="group flex items-center gap-2 hover:text-white transition-colors">
-                    <span className="w-0 h-[2px] bg-blue-500 transition-all duration-300 group-hover:w-3 rounded-full"></span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Column 3: Global Presence */}
+          <div className="lg:border-l lg:border-white/5 lg:pl-8 space-y-12">
+            <div>
+              <h4 className="text-base font-black mb-8 text-white tracking-widest uppercase flex items-center gap-2">
+                <MapPin size={18} className="text-evoke-accent" />
+                Global Presence
+              </h4>
+              <div className="grid grid-cols-1 gap-y-10">
+                {/* India */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-evoke-accent font-black text-xs tracking-wider uppercase">
+                    <span className="w-4 h-[1px] bg-evoke-accent"></span>
+                    India
+                  </div>
+                  <div className="space-y-6">
+                    <div className="flex gap-3 text-gray-400 text-sm">
+                      <MapPin size={16} className="shrink-0 mt-1 text-evoke-accent/50" />
+                      <div>
+                        <p className="font-bold text-white/90 text-base mb-1">Punjab Office (HQ)</p>
+                        <a
+                          href="https://www.google.com/maps/search/?api=1&query=SCO+No.+09-Ground+Floor,+Aero+View+Plaza,+Airport+Road,+Dyalpura,+Punjab+-+140603"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="leading-relaxed mb-2 text-base block hover:text-evoke-accent transition-colors"
+                        >
+                          SCO No. 09-Ground Floor, Aero View Plaza, Airport Road, Dyalpura, Punjab - 140603
+                        </a>
+                        <a href="tel:+919056544487" className="text-evoke-accent hover:underline text-base">+91-90565-44487</a>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 text-gray-400 text-sm pt-4 border-t border-white/5">
+                      <MapPin size={16} className="shrink-0 mt-1 text-evoke-accent/50" />
+                      <div>
+                        <p className="font-bold text-white/90 mb-1">Gujarat Office</p>
+                        <a
+                          href="https://www.google.com/maps/search/?api=1&query=310+-+Sampada,+Navarangpura,+Ahmedabad,+Gujarat+-+380009"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="leading-relaxed block hover:text-evoke-accent transition-colors"
+                        >
+                          310 - Sampada, Navarangpura, Ahmedabad, Gujarat - 380009
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Contact  spans full width on mobile */}
-          <div className="col-span-2 md:col-span-2">
-            <h4 className="text-xs md:text-sm font-black mb-4 text-white tracking-widest uppercase">Contact Us</h4>
-            <ul className="space-y-3 text-gray-400 text-sm font-medium">
-              <li>
-                <a href="tel:+917986175240" className="group flex items-center gap-3 hover:text-white transition-colors rounded-xl hover:bg-white/5 py-1">
-                  <div className="w-8 h-8 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
-                    <Phone size={14} className="text-evoke-accent group-hover:text-white transition-colors" />
+                {/* UK & USA */}
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-evoke-accent font-black text-xs tracking-wider uppercase">
+                      <span className="w-4 h-[1px] bg-evoke-accent"></span>
+                      United Kingdom
+                    </div>
+                    <div className="flex gap-3 text-gray-400 text-sm">
+                      <MapPin size={16} className="shrink-0 mt-1 text-evoke-accent/50" />
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=20-22+Wenlock+Road,+Hoxton,+London+N1+7GU"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="leading-relaxed hover:text-evoke-accent transition-colors"
+                      >
+                        20-22 Wenlock Road, Hoxton, London N1 7GU
+                      </a>
+                    </div>
                   </div>
-                  <span>+91 7986175240</span>
-                </a>
-              </li>
-              <li>
-                <a href="https://mail.google.com/mail/?view=cm&to=damart.ai.guladab@gmail.com" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 hover:text-white transition-colors rounded-xl hover:bg-white/5 py-1 cursor-pointer">
-                  <div className="w-8 h-8 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
-                    <Mail size={14} className="text-evoke-accent group-hover:text-white transition-colors" />
+                  <div className="space-y-4 pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-2 text-evoke-accent font-black text-xs tracking-wider uppercase">
+                      <span className="w-4 h-[1px] bg-evoke-accent"></span>
+                      USA
+                    </div>
+                    <div className="flex gap-3 text-gray-400 text-sm">
+                      <MapPin size={16} className="shrink-0 mt-1 text-evoke-accent/50" />
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=616,+Corporate+Way+Suite+2,+6015+Valley+Cottage+NY+10989"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="leading-relaxed hover:text-evoke-accent transition-colors"
+                      >
+                        616, Corporate Way Suite 2, 6015 Valley Cottage NY 10989
+                      </a>
+                    </div>
                   </div>
-                  <span className="break-all">damart.ai.guladab@gmail.com</span>
-                </a>
-              </li>
-              <li>
-                <a href="https://www.damnart.com/" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 hover:text-white transition-colors rounded-xl hover:bg-white/5 py-1">
-                  <div className="w-8 h-8 rounded-full bg-evoke-accent/10 flex items-center justify-center group-hover:bg-evoke-accent transition-colors shrink-0">
-                    <Globe size={14} className="text-evoke-accent group-hover:text-white transition-colors" />
-                  </div>
-                  <span>www.damnart.com</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+                </div>
 
+                {/* Canada & Dubai */}
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-evoke-accent font-black text-xs tracking-wider uppercase">
+                      <span className="w-4 h-[1px] bg-evoke-accent"></span>
+                      Canada
+                    </div>
+                    <div className="flex gap-3 text-gray-400 text-sm">
+                      <MapPin size={16} className="shrink-0 mt-1 text-evoke-accent/50" />
+                      <div>
+                        <a
+                          href="https://www.google.com/maps/search/?api=1&query=8449,+116+A+Street,+Delta+-+V4C7N7,+Greater+Vancouver"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="leading-relaxed mb-1 block hover:text-evoke-accent transition-colors"
+                        >
+                          8449, 116 A Street, Delta - V4C7N7, Greater Vancouver
+                        </a>
+                        <a href="tel:+17787989624" className="text-evoke-accent hover:underline">+1 (778) 798-9624</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-4 pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-2 text-evoke-accent font-black text-xs tracking-wider uppercase">
+                      <span className="w-4 h-[1px] bg-evoke-accent"></span>
+                      Dubai
+                    </div>
+                    <div className="flex gap-3 text-gray-400 text-sm">
+                      <MapPin size={16} className="shrink-0 mt-1 text-evoke-accent/50" />
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=The+Prism+Tower,+Business+Bay,+Dubai,+UAE"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="leading-relaxed hover:text-evoke-accent transition-colors"
+                      >
+                        Suite No 2902 and 2903, The Prism Tower, Business Bay, Dubai, UAE
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ── Bottom bar ── */}
-        <div className="pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-gray-500 text-xs md:text-sm font-medium text-center">
-          <span>© 2026 EVOKE AI Platform. Premium automation by DamnArt. All rights reserved.</span>
-          <a href="https://www.damnart.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy Policy</a>
+        <div className="mt-20 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 text-gray-500 text-sm font-medium text-center">
+          <span className="max-w-md">© 2026 EVOKE AI Platform. Premium automation by DamnArt. All rights reserved.</span>
+          <div className="flex gap-10">
+            <a href="https://www.damnart.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors uppercase tracking-widest">Privacy Policy</a>
+          </div>
         </div>
-
       </div>
     </footer>
   );
@@ -1612,6 +1737,58 @@ const CostGraph = () => {
 
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    companyName: '',
+    phoneNumber: '',
+    message: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('sending');
+
+    try {
+      // NOTE: Replace these with your actual EmailJS credentials
+      // SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY
+      await emailjs.send(
+        'service_f46hijy',
+        'template_ct2tyjl',
+        {
+          from_name: formData.fullName,
+          from_email: formData.email,
+          company_name: formData.companyName,
+          phone_number: formData.phoneNumber,
+          message: formData.message,
+          to_name: 'Evoke AI Team',
+        },
+        'Fk5LlRE23qnSefaZN'
+      );
+
+      setStatus('success');
+      setFormData({
+        fullName: '',
+        email: '',
+        companyName: '',
+        phoneNumber: '',
+        message: ''
+      });
+
+      // Reset status after 5 seconds
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -1724,6 +1901,33 @@ export default function App() {
               <div className="absolute inset-0 bg-gradient-to-br from-evoke-accent/5 to-transparent rounded-[3.5rem] transition-all group-hover:from-evoke-accent/10 pointer-events-none" />
               <div className="relative z-10">
                 <h3 className="text-3xl font-black mb-10 tracking-tight text-evoke-black">Get Your Free AI Audit</h3>
+
+                {/* Form Status Messages */}
+                <AnimatePresence>
+                  {status === 'success' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      className="mb-8 p-4 bg-green-50 border border-green-200 text-green-700 rounded-2xl font-bold flex items-center gap-3"
+                    >
+                      <CheckCircle2 size={24} />
+                      Lead sent successfully! We'll be in touch soon.
+                    </motion.div>
+                  )}
+                  {status === 'error' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      className="mb-8 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl font-bold flex items-center gap-3"
+                    >
+                      <X size={24} />
+                      Oops! Something went wrong. Please try again.
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <motion.form
                   variants={{
                     hidden: { opacity: 0 },
@@ -1736,7 +1940,7 @@ export default function App() {
                   whileInView="show"
                   viewport={{ once: true }}
                   className="space-y-6"
-                  onSubmit={(e) => e.preventDefault()}
+                  onSubmit={handleSubmit}
                 >
                   <motion.div
                     variants={{
@@ -1745,24 +1949,62 @@ export default function App() {
                     }}
                     className="grid md:grid-cols-2 gap-6"
                   >
-                    <input type="text" placeholder="Full Name" className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold" />
-                    <input type="email" placeholder="Email" className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold" />
+                    <input
+                      type="text"
+                      name="fullName"
+                      placeholder="Full Name"
+                      required
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold"
+                    />
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold"
+                    />
                   </motion.div>
                   <motion.div variants={{ hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } }} className="grid md:grid-cols-2 gap-6">
-                    <input type="text" placeholder="Company Name" className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold" />
-                    <input type="tel" placeholder="Phone Number" className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold" />
+                    <input
+                      type="text"
+                      name="companyName"
+                      placeholder="Company Name"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold"
+                    />
+                    <input
+                      type="tel"
+                      name="phoneNumber"
+                      placeholder="Phone Number"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold"
+                    />
                   </motion.div>
                   <motion.div variants={{ hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } }}>
-                    <textarea placeholder="How can we help your business?" className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold h-32 resize-none" />
+                    <textarea
+                      name="message"
+                      placeholder="How can we help your business?"
+                      required
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50/50 border border-black/5 rounded-2xl px-6 py-4 outline-none focus:border-evoke-accent/50 focus:bg-white transition-all placeholder:text-gray-400 font-bold h-32 resize-none"
+                    />
                   </motion.div>
                   <motion.div variants={{ hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } }}>
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full bg-evoke-accent text-white py-6 rounded-2xl font-black text-xl shadow-2xl shadow-evoke-accent/30 hover:bg-evoke-accent/90 transition-all flex items-center justify-center gap-3 group/btn"
+                      disabled={status === 'sending'}
+                      className={`w-full bg-evoke-accent text-white py-6 rounded-2xl font-black text-xl shadow-2xl shadow-evoke-accent/30 hover:bg-evoke-accent/90 transition-all flex items-center justify-center gap-3 group/btn ${status === 'sending' ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                      Start Your Growth
-                      <ArrowRight size={22} className="group-hover/btn:translate-x-1 transition-transform" />
+                      {status === 'sending' ? 'Sending...' : 'Start Your Growth'}
+                      {status !== 'sending' && <ArrowRight size={22} className="group-hover/btn:translate-x-1 transition-transform" />}
                     </motion.button>
                   </motion.div>
                 </motion.form>
@@ -1779,12 +2021,44 @@ export default function App() {
 }
 
 const FloatingButtons = ({ mobileOpen }: { mobileOpen: boolean }) => {
+  const [showTop, setShowTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   if (mobileOpen) return null;
 
   return (
     <>
       {/* Right-side floating buttons */}
       <div className="fixed bottom-4 right-4 md:bottom-10 md:right-6 z-50 flex flex-col items-end gap-5">
+
+        {/* Back to Top */}
+        <AnimatePresence>
+          {showTop && (
+            <motion.button
+              initial={{ opacity: 0, y: 20, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.8 }}
+              whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+              whileTap={{ scale: 0.9 }}
+              onClick={scrollToTop}
+              className="w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center bg-white/40 backdrop-blur-xl border border-white/40 shadow-2xl shadow-black/10 group"
+              aria-label="Back to top"
+            >
+              <ArrowUp className="w-5 h-5 md:w-6 md:h-6 text-slate-900 group-hover:-translate-y-1 transition-transform" />
+            </motion.button>
+          )}
+        </AnimatePresence>
 
         <motion.a
           href="https://wa.me/917986175240"
@@ -1806,42 +2080,90 @@ const FloatingButtons = ({ mobileOpen }: { mobileOpen: boolean }) => {
           </svg>
         </motion.a>
 
-        {/* Enquiry "Cartoon Thought Bubble" Button */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{
-            opacity: 1,
-            x: 0
-          }}
-          transition={{
-            delay: 0.3,
-            type: 'spring',
-            stiffness: 300,
-            damping: 20
-          }}
-          className="relative group cursor-pointer"
-          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          {/* Main Bubble (Label) — Positioned to the top-left of the button */}
-          <div className="absolute bottom-8 right-8 w-auto h-auto min-w-[100px] md:min-w-[120px] rounded-2xl bg-white/95 backdrop-blur-md flex flex-col items-center justify-center shadow-2xl border border-blue-100/50 group-hover:scale-110 transition-transform duration-300 z-10 py-3 px-4">
-            <span className="text-blue-600 font-black text-[10px] md:text-[12px] uppercase tracking-[0.05em] md:tracking-[0.12em] leading-tight text-center whitespace-nowrap">
-              Enquire Now
-            </span>
-
-            {/* Pointer Tail pointing diagonally to the button below-right */}
+        {/* Enquiry Section (Label + Action Button) */}
+        <div className="relative flex flex-col items-end group">
+          {/* Floating "Enquire Now" Speech Bubble Label (White/Blue Theme) */}
+          <motion.div
+            initial={{ opacity: 0, x: -20, scale: 0.8 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              scale: 1,
+              y: [0, -8, 0] // Floating bobbing effect
+            }}
+            transition={{
+              opacity: { delay: 0.4 },
+              x: { delay: 0.4 },
+              scale: { delay: 0.4 },
+              y: { repeat: Infinity, duration: 3, ease: "easeInOut" }
+            }}
+            className="absolute right-[115%] -top-6 cursor-pointer"
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             <div
-              className="absolute -bottom-1 -right-1 w-3 h-3 bg-white/95 border-b border-r border-blue-100/50 rotate-45"
+              className="relative py-2 px-5 md:py-2.5 md:px-7 rounded-full"
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#0066ff',
+                fontFamily: "'Arial Black', 'Impact', sans-serif",
+                fontSize: '13px',
+                fontWeight: 900,
+                letterSpacing: '0.5px',
+                filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15))',
+                whiteSpace: 'nowrap',
+                border: '1px solid rgba(0, 102, 255, 0.1)'
+              }}
+            >
+              ENQUIRE NOW
+
+              {/* Specific Tail pointing to the action button */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '-14px',
+                  width: 0,
+                  height: 0,
+                  borderTop: '10px solid transparent',
+                  borderBottom: '10px solid transparent',
+                  borderLeft: '22px solid #ffffff',
+                  transform: 'rotate(18deg)',
+                  transformOrigin: 'left',
+                  filter: 'drop-shadow(2px 0 2px rgba(0, 0, 0, 0.05))'
+                }}
+              />
+            </div>
+          </motion.div>
+
+          {/* Business Circle / Question Mark (The Action Button) */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              scale: [1, 1.05, 1]
+            }}
+            transition={{
+              opacity: { delay: 0.3, duration: 0.4 },
+              x: { delay: 0.3, type: 'spring', stiffness: 300, damping: 20 },
+              scale: { repeat: Infinity, duration: 1.5, ease: "easeInOut" }
+            }}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/40 cursor-pointer overflow-hidden relative"
+            style={{ background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)' }}
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <HelpCircle className="w-6 h-6 md:w-8 md:h-8 text-white relative z-10" />
+
+            {/* Subtle inner heartbeat pulse ring */}
+            <motion.div
+              animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
+              className="absolute inset-0 rounded-full border-2 border-white/30"
             />
-          </div>
-
-          {/* Business Circle (The Action Button) */}
-          <div className="relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 flex items-center justify-center text-white border-2 border-white/30 shadow-lg">
-            <HelpCircle className="w-5 h-5 md:w-7 md:h-7 relative z-10" />
-
-            {/* Subtle inner pulse */}
-            <div className="absolute inset-0 rounded-full animate-ping bg-blue-400/20 pointer-events-none" />
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </>
   );
